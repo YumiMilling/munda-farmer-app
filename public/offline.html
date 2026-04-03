@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Munda - Offline</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f0fdf4;
+      color: #1b4332;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    .offline-card {
+      background: white;
+      border-radius: 16px;
+      padding: 48px 32px;
+      max-width: 400px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .icon { font-size: 48px; margin-bottom: 16px; }
+    h1 { font-size: 24px; margin-bottom: 8px; }
+    p { color: #52796f; line-height: 1.6; }
+    button {
+      margin-top: 24px;
+      padding: 12px 32px;
+      background: #2d6a4f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-card">
+    <div class="icon">&#127793;</div>
+    <h1>You're Offline</h1>
+    <p>Don't worry - your saved data is safe. Connect to the internet to sync your farm data.</p>
+    <button onclick="location.reload()">Try Again</button>
+  </div>
+</body>
+</html>

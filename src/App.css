@@ -1,0 +1,293 @@
+/* Header */
+.app-header {
+  background: var(--green-800);
+  color: var(--white);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+
+.app-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-badge {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.status-badge.online {
+  background: rgba(149, 213, 178, 0.2);
+  color: var(--green-400);
+}
+
+.status-badge.offline {
+  background: rgba(254, 243, 199, 0.3);
+  color: var(--earth-100);
+}
+
+/* Main Content */
+.app-main {
+  flex: 1;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Welcome Section */
+.welcome {
+  margin-bottom: 24px;
+}
+
+.welcome h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.welcome p {
+  color: var(--gray-600);
+  font-size: 15px;
+}
+
+/* Quick Actions Grid */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.action-card {
+  background: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-card:active {
+  transform: scale(0.97);
+}
+
+.action-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.action-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.action-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--green-900);
+}
+
+.action-desc {
+  font-size: 12px;
+  color: var(--gray-600);
+}
+
+/* Section Headers */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.section-header a {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Activity Feed */
+.activity-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.activity-item {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.activity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.activity-dot.crop { background: var(--green-600); }
+.activity-dot.weather { background: #3b82f6; }
+.activity-dot.market { background: var(--earth-500); }
+
+.activity-text {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.activity-time {
+  font-size: 12px;
+  color: var(--gray-400);
+  flex-shrink: 0;
+}
+
+/* Weather Card */
+.weather-card {
+  background: linear-gradient(135deg, var(--green-700), var(--green-800));
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-md);
+}
+
+.weather-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.weather-temp {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.weather-icon {
+  font-size: 40px;
+}
+
+.weather-desc {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 16px;
+}
+
+.weather-details {
+  display: flex;
+  gap: 24px;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.weather-detail span {
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  opacity: 1;
+  margin-top: 2px;
+}
+
+/* Bottom Nav */
+.bottom-nav {
+  background: var(--white);
+  border-top: 1px solid var(--green-200);
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: space-around;
+  position: sticky;
+  bottom: 0;
+}
+
+.nav-item {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+
+.nav-item:hover {
+  background: var(--green-200);
+}
+
+.nav-item.active {
+  color: var(--green-700);
+}
+
+.nav-icon {
+  font-size: 22px;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Install Banner */
+.install-banner {
+  background: var(--earth-100);
+  border: 1px solid #fde68a;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.install-banner p {
+  flex: 1;
+  font-size: 14px;
+  color: var(--earth-700);
+}
+
+.install-btn {
+  background: var(--earth-500);
+  color: var(--white);
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dismiss-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--earth-500);
+  padding: 4px;
+}

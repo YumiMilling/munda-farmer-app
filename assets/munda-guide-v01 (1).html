@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Munda — A Regenerative Field Guide for Zambian Extension Officers</title>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ochre: #B8622D;
+  --ochre-light: #D4934F;
+  --ochre-pale: #F0DCC8;
+  --green: #2D5A27;
+  --green-light: #4A7A3F;
+  --green-pale: #D5E8D0;
+  --char: #2C2C2C;
+  --char-light: #5A5A5A;
+  --warm: #F5F0E8;
+  --warm-dark: #EAE2D4;
+  --white: #FEFDFB;
+  --soil-1: #8B5E3C;
+  --soil-2: #A67B5B;
+  --soil-3: #C49A6C;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--char);
+  background: var(--warm);
+}
+
+/* ── COVER ── */
+.cover {
+  min-height: 100vh;
+  background: var(--char);
+  color: var(--warm);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 8vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 32%,
+      var(--soil-1) 32%,
+      var(--soil-1) 52%,
+      var(--soil-2) 52%,
+      var(--soil-2) 72%,
+      var(--soil-3) 72%,
+      var(--soil-3) 100%
+    );
+  opacity: 0.12;
+}
+
+.cover-content { position: relative; z-index: 1; }
+
+.cover-mark {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cover-mark span {
+  display: block;
+  border-radius: 1px;
+}
+.cover-mark span:nth-child(1) { height: 28%; background: var(--soil-3); }
+.cover-mark span:nth-child(2) { height: 36%; background: var(--soil-2); }
+.cover-mark span:nth-child(3) { height: 36%; background: var(--soil-1); }
+.cover-mark span:nth-child(4) {
+  position: absolute;
+  width: 3px;
+  height: 40px;
+  background: var(--green-light);
+  left: 30px;
+  top: 8px;
+  border-radius: 1px;
+}
+
+.cover h1 {
+  font-family: 'Bitter', serif;
+  font-weight: 700;
+  font-size: clamp(2.8rem, 7vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  color: var(--ochre-light);
+}
+
+.cover-sub {
+  font-size: 1.35rem;
+  font-weight: 300;
+  line-height: 1.4;
+  max-width: 540px;
+  margin-bottom: 3rem;
+  color: var(--warm-dark);
+}
+
+.cover-tag {
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  border-top: 2px solid var(--ochre);
+  padding-top: 1rem;
+  display: inline-block;
+}
+
+.cover-footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cover-credit {
+  font-size: 0.85rem;
+  color: var(--char-light);
+  line-height: 1.5;
+}
+
+/* ── GENERAL SECTIONS ── */
+.page-break { page-break-before: always; }
+
+section {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.sec-full {
+  max-width: 100%;
+  background: var(--white);
+  border-bottom: 1px solid var(--warm-dark);
+}
+
+.sec-full .sec-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.eye {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-family: 'Bitter', serif;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.15;
+  color: var(--char);
+  margin-bottom: 1.5rem;
+}
+
+h3 {
+  font-family: 'Bitter', serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  color: var(--ochre);
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+h4 {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--char);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+p { margin-bottom: 1rem; }
+p:last-child { margin-bottom: 0; }
+
+strong { font-weight: 600; }
+
+/* ── PULL QUOTES ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1rem 1.5rem;
+  margin: 2rem 0;
+  font-size: 1.05rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--char-light);
+  background: var(--white);
+}
+
+/* ── MODULE CARD ── */
+.module {
+  background: var(--white);
+  border: 1px solid var(--warm-dark);
+  border-top: 3px solid var(--ochre);
+  padding: 2rem;
+  margin: 2.5rem 0;
+}
+
+.module-num {
+  font-family: 'Bitter', serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--ochre);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+
+.module h3 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: var(--char);
+}
+
+.module-oneliner {
+  font-size: 1.05rem;
+  color: var(--char-light);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+/* ── DECISION BOX ── */
+.decision {
+  background: var(--ochre-pale);
+  border-left: 3px solid var(--ochre);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.decision-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ochre);
+  margin-bottom: 0.5rem;
+}
+
+/* ── TELL THE FARMER ── */
+.farmer-talk {
+  background: var(--green-pale);
+  border-left: 3px solid var(--green);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.farmer-talk-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  margin-bottom: 0.5rem;
+}
+
+/* ── RISK BOX ── */
+.risk {
+  background: #FDF0E6;
+  border-left: 3px solid #C4652A;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.risk-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #C4652A;
+  margin-bottom: 0.5rem;
+}
+
+/* ── TABLES ── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+th {
+  background: var(--ochre);
+  color: var(--white);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--warm-dark);
+  vertical-align: top;
+}
+
+tr:nth-child(even) td { background: var(--warm); }
+
+/* ── STEPS ── */
+.steps { counter-reset: step; margin: 1.5rem 0; }
+
+.step {
+  counter-increment: step;
+  padding: 1rem 1rem 1rem 3.5rem;
+  position: relative;
+  margin-bottom: 0.5rem;
+  background: var(--white);
+  border: 1px solid var(--warm-dark);
+}
+
+.step::before {
+  content: counter(step);
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  width: 2rem;
+  height: 2rem;
+  background: var(--ochre);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* ── COMPARISON ── */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.compare-adv, .compare-dis {
+  padding: 1.25rem;
+}
+
+.compare-adv {
+  background: var(--green-pale);
+  border-top: 3px solid var(--green);
+}
+
+.compare-dis {
+  background: #FDF0E6;
+  border-top: 3px solid #C4652A;
+}
+
+.compare-label {
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.compare-adv .compare-label { color: var(--green); }
+.compare-dis .compare-label { color: #C4652A; }
+
+.compare ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.95rem;
+}
+
+.compare li { margin-bottom: 0.35rem; }
+
+/* ── DIVIDER ── */
+.divider {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.divider::after {
+  content: '';
+  display: block;
+  height: 1px;
+  background: var(--warm-dark);
+}
+
+/* ── TOC ── */
+.toc { list-style: none; padding: 0; }
+
+.toc li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--warm-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.toc-num {
+  font-family: 'Bitter', serif;
+  font-weight: 700;
+  color: var(--ochre);
+  min-width: 2.5rem;
+}
+
+.toc-title { flex: 1; font-weight: 600; }
+
+.toc-section {
+  font-size: 0.8rem;
+  color: var(--char-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 1.5rem 0 0.5rem;
+  border-bottom: 2px solid var(--ochre);
+  font-weight: 700;
+}
+
+/* ── FOOTER ── */
+.guide-footer {
+  background: var(--char);
+  color: var(--char-light);
+  padding: 3rem 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.guide-footer strong { color: var(--ochre-light); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .cover { padding: 6vw; }
+  .cover h1 { font-size: 2.2rem; }
+  section { padding: 2.5rem 1.25rem; }
+  .sec-full .sec-inner { padding: 2.5rem 1.25rem; }
+  .module { padding: 1.25rem; }
+  h2 { font-size: 1.6rem; }
+  .compare { grid-template-columns: 1fr; }
+  table { font-size: 0.85rem; }
+  th, td { padding: 0.5rem 0.65rem; }
+}
+
+@media print {
+  .cover { min-height: auto; padding: 4rem; }
+  section { padding: 2rem 0; }
+  .module { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- COVER                                                          -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-content">
+    <div class="cover-mark">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <h1>Munda</h1>
+    <p class="cover-sub">A regenerative field guide for Zambian extension officers. What works. What doesn't. What to try next.</p>
+    <span class="cover-tag">Grassroots Trust · 2026</span>
+  </div>
+  <div class="cover-footer">
+    <div class="cover-credit">
+      Based on the work of Sebastian Scott, Grassroots Trust, Kafue<br>
+      Structured for extension officers serving smallholder farmers<br>
+      In the context of CATSP and the transition beyond FISP
+    </div>
+    <div class="cover-credit">
+      v0.1 · Working Draft<br>
+      Not for distribution
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- TABLE OF CONTENTS                                              -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="eye">Contents</div>
+  <h2>Guide Structure</h2>
+
+  <ul class="toc">
+    <li class="toc-section">Context</li>
+    <li><span class="toc-num">01</span><span class="toc-title">Why This Guide Exists</span></li>
+    <li><span class="toc-num">02</span><span class="toc-title">How to Use This Guide</span></li>
+    <li><span class="toc-num">03</span><span class="toc-title">Understanding Your Farmer's Decisions</span></li>
+    <li><span class="toc-num">04</span><span class="toc-title">Agroecological Zones and Farming Systems</span></li>
+
+    <li class="toc-section">Foundation</li>
+    <li><span class="toc-num">05</span><span class="toc-title">Soil Health — The Starting Point for Everything</span></li>
+    <li><span class="toc-num">06</span><span class="toc-title">Improved Manure Handling</span></li>
+    <li><span class="toc-num">07</span><span class="toc-title">Composting and Green Manure</span></li>
+
+    <li class="toc-section">Field Practice</li>
+    <li><span class="toc-num">08</span><span class="toc-title">Land Preparation and Minimum Tillage</span></li>
+    <li><span class="toc-num">09</span><span class="toc-title">Crop Establishment and Weed Management</span></li>
+    <li><span class="toc-num">10</span><span class="toc-title">Intercropping Systems</span></li>
+    <li><span class="toc-num">11</span><span class="toc-title">Crop Rotation Design</span></li>
+    <li><span class="toc-num">12</span><span class="toc-title">Agroforestry Integration</span></li>
+
+    <li class="toc-section">Livestock</li>
+    <li><span class="toc-num">13</span><span class="toc-title">Holistic Grazing Management</span></li>
+    <li><span class="toc-num">14</span><span class="toc-title">Livestock Integration — Chickens, Pigs, Small Ruminants</span></li>
+
+    <li class="toc-section">Protection</li>
+    <li><span class="toc-num">15</span><span class="toc-title">Pest and Disease Management Without Chemicals</span></li>
+    <li><span class="toc-num">16</span><span class="toc-title">Water Management and Soil Moisture Conservation</span></li>
+
+    <li class="toc-section">Crops</li>
+    <li><span class="toc-num">17</span><span class="toc-title">Maize in a Regenerative System</span></li>
+    <li><span class="toc-num">18</span><span class="toc-title">Sorghum and Pearl Millet</span></li>
+    <li><span class="toc-num">19</span><span class="toc-title">Groundnuts and Soybeans</span></li>
+    <li><span class="toc-num">20</span><span class="toc-title">Pigeon Pea and Cowpea</span></li>
+    <li><span class="toc-num">21</span><span class="toc-title">Cassava and Sweet Potato</span></li>
+    <li><span class="toc-num">22</span><span class="toc-title">Velvet Bean as a System Component</span></li>
+
+    <li class="toc-section">Business</li>
+    <li><span class="toc-num">23</span><span class="toc-title">Farming as a Business After FISP</span></li>
+    <li><span class="toc-num">24</span><span class="toc-title">Market Linkages and Value Addition</span></li>
+  </ul>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 01 · WHY THIS GUIDE EXISTS                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="eye">01 · Context</div>
+  <h2>Why This Guide Exists</h2>
+
+  <p>For over two decades, Zambian agriculture extension has been built around a simple loop: the government provides subsidised fertiliser through the Farmer Input Support Programme (FISP), and extension officers advise farmers on how to apply those inputs to monoculture maize. The system was never ideal — it favoured maize over nutritional diversity, depleted soils of organic matter, created input dependency, and reached only a fraction of farming households effectively. But it was a system. It gave extension officers a clear message and farmers a clear expectation.</p>
+
+  <p>That system is ending. Under the Comprehensive Agricultural Transformation Support Programme (CATSP), Zambia is phasing out FISP and replacing blanket input subsidies with targeted support, market-led aggregation, and sustainable intensification. The policy is correct. The gap is operational: no one has yet given extension officers the practical replacement toolkit for what they do in the field every day.</p>
+
+  <p>This guide fills that gap.</p>
+
+  <p>It is based on regenerative farming practices developed and proven under Zambian conditions — primarily by Sebastian Scott at Grassroots Trust near Kafue, with supporting evidence from CIMMYT monitoring, CIFOR-ICRAF documentation, and the work of farming communities at Mpanshya and across Southern and Western Provinces. These are not imported techniques adapted for Zambia. They were developed in Zambia, on Zambian soils, by a farmer working at the same scale and with the same tools available to the smallholders you serve.</p>
+
+  <p>The practices in this guide do not require inorganic fertiliser, herbicides, or pesticides. They do not require machinery. Every input described is locally available and affordable. Many of the techniques — intercropping, legume rotation, kraal manure, cover cropping — are traditional practices that Zambian farmers used before the input-subsidy era pushed them toward monoculture. This guide does not ask farmers to adopt something foreign. In many cases, it asks them to return to something their grandparents understood, refined with modern knowledge of soil biology.</p>
+
+  <div class="pull">This is not an organic farming manual for enthusiasts. It is the field guide for Zambian agriculture after FISP.</div>
+
+  <h3>Who This Guide Is For</h3>
+
+  <p>The primary audience is <strong>Camp Extension Officers</strong> in the Ministry of Agriculture, and extension staff in private sector and NGO programmes working directly with smallholder farmers. The guide assumes you have agricultural training — a diploma or degree — and field experience. It does not talk down to you. It explains the science behind each practice so that you can make informed decisions about what to recommend in your specific conditions, and so that you can answer farmer questions with confidence.</p>
+
+  <p>The secondary audience is <strong>lead farmers, cooperative leaders, and agricultural programme managers</strong> who need a practical reference for regenerative practices adapted to Zambian conditions.</p>
+
+  <h3>What This Guide Is Not</h3>
+
+  <p>This is not a complete replacement for your existing knowledge. Conventional soil chemistry, variety selection, planting date recommendations, and post-harvest handling remain valid and important. This guide adds to your toolkit — specifically the parts that address how to maintain and improve yields without purchased inputs, how to build soil health over multiple seasons, and how to design farming systems rather than managing individual crops.</p>
+
+  <p>This is not an anti-fertiliser manifesto. Where soils are severely degraded (below 1% organic matter, highly acidite), small quantities of targeted inorganic fertiliser or lime may accelerate recovery. The guide says so where relevant. The goal is not ideological purity. The goal is farming systems that work for the people you serve.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 02 · HOW TO USE THIS GUIDE                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="eye">02 · Structure</div>
+  <h2>How to Use This Guide</h2>
+
+  <p>Every technical module in this guide follows the same structure. Learn it once and you can navigate any module quickly in the field.</p>
+
+  <table>
+    <tr>
+      <th style="width:35%">Section</th>
+      <th>What It Contains</th>
+    </tr>
+    <tr>
+      <td><strong>What It Is</strong></td>
+      <td>One-line definition of the practice.</td>
+    </tr>
+    <tr>
+      <td><strong>When to Use It</strong></td>
+      <td>Season, soil type, farming situation. A decision guide to help you match the practice to the farmer standing in front of you.</td>
+    </tr>
+    <tr>
+      <td><strong>How to Do It</strong></td>
+      <td>Step-by-step instructions with quantities, spacing, timing. Specific enough to implement without guessing.</td>
+    </tr>
+    <tr>
+      <td><strong>What to Expect</strong></td>
+      <td>Realistic yield ranges, timelines, and system outcomes. Based on documented results under Zambian conditions, not laboratory projections.</td>
+    </tr>
+    <tr>
+      <td><strong>Advantages / Disadvantages</strong></td>
+      <td>Honest trade-offs. Every practice has costs and limitations. You need to know them before recommending them.</td>
+    </tr>
+    <tr>
+      <td style="background: var(--green-pale);"><strong>What to Tell the Farmer</strong></td>
+      <td style="background: var(--green-pale);">The conversation framing. Not a script — but the key points that help you explain this practice to a real person making a real decision about their field and their family's food.</td>
+    </tr>
+    <tr>
+      <td style="background: #FDF0E6;"><strong>What Can Go Wrong</strong></td>
+      <td style="background: #FDF0E6;">Failure modes, common mistakes, and what to do about them.</td>
+    </tr>
+  </table>
+
+  <div class="decision">
+    <div class="decision-title">Decision Boxes</div>
+    <p>Throughout the guide, you will see boxes like this one. These are <strong>decision guides</strong> — they help you choose the right practice for a specific farmer situation. "If the farmer has livestock but no fertiliser budget → see Module 06." They are designed so you can make field recommendations without reading the entire guide first.</p>
+  </div>
+
+  <div class="farmer-talk">
+    <div class="farmer-talk-title">What to Tell the Farmer</div>
+    <p>Green boxes like this one contain the conversation framing — the way to explain a practice to a farmer in practical terms. Use these at field days, during farm visits, and in farmer group meetings. They avoid jargon and focus on what the farmer gains, what it costs them, and what they should watch for.</p>
+  </div>
+
+  <div class="risk">
+    <div class="risk-title">What Can Go Wrong</div>
+    <p>Orange boxes contain failure modes and honest risks. Share these with farmers before they commit to a practice. Trust is built when you tell people what can go wrong before it does, not after.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 03 · UNDERSTANDING FARMER DECISIONS                            -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="eye">03 · Context</div>
+  <h2>Understanding Your Farmer's Decisions</h2>
+
+  <p>Before recommending any practice, understand why the farmer in front of you farms the way they do. Their decisions are rational. They are not "resistant to change" or "lacking knowledge." They are managing risk with limited resources. Until you understand their constraints, your advice is noise.</p>
+
+  <h3>The Risk Calculation</h3>
+
+  <p>A smallholder farmer's primary goal is not yield maximisation. It is food security — ensuring that the household eats through the hungry season (November–February) until the next harvest. Every farming decision is filtered through this question: <strong>"If this fails, can my family still eat?"</strong></p>
+
+  <p>This is why farmers are cautious about new practices. The extension officer who says "try this on your whole field" is asking them to bet their family's food on something unproven. The one who says "try this on a quarter-hectare while keeping the rest as you normally do" is working with their risk logic, not against it.</p>
+
+  <h3>Labour, Not Just Inputs</h3>
+
+  <p>The binding constraint for most smallholder households is labour, not land or knowledge. A household with two working adults and school-age children who help on weekends can cultivate perhaps 1–2 hectares by hand per season. Any practice that increases labour demand — even if it increases yield — may be rejected because there are simply not enough hands and hours.</p>
+
+  <p>This is critical when recommending regenerative practices. Some save labour (minimum tillage, permanent planting basins). Some add labour in exchange for yield (improved manure handling, composting). Some redistribute labour across the season (early dry-season land preparation). Always tell the farmer the labour cost alongside the benefit.</p>
+
+  <h3>Gender and Decision-Making</h3>
+
+  <p>In most Zambian farming households, men and women manage different aspects of the farm. Men typically control field crops (maize, cash crops) and livestock. Women typically manage vegetable gardens, small grains, legumes, and post-harvest processing. Decisions about the main maize field often require male agreement even when women do much of the work. Practices that affect the vegetable garden or legume plot can often be adopted by women directly. Know who makes the decision you're trying to influence.</p>
+
+  <h3>The Cash Question</h3>
+
+  <p>Many farmers need cash during the growing season — for school fees (January), for grinding mill charges, for medical emergencies. They sell maize early, often at depressed prices, because they need cash now. A farming system that provides multiple income streams across the year — pigeon pea harvest in the dry season, eggs from integrated poultry, vegetables from an irrigated garden — reduces the pressure to sell the maize crop early at a loss.</p>
+
+  <div class="decision">
+    <div class="decision-title">Before You Recommend a Practice, Ask</div>
+    <p><strong>How much labour does the household have?</strong> Two adults? One adult and children? Elderly?</p>
+    <p><strong>Do they have livestock?</strong> Cattle, goats, chickens, pigs? Manure availability changes everything.</p>
+    <p><strong>What is their soil type?</strong> Sandy, loam, clay? Colour? Do they see earthworms? How deep can they push a stick into dry soil?</p>
+    <p><strong>When do they need cash?</strong> School fees? What month is the pressure highest?</p>
+    <p><strong>What did they grow last season?</strong> And the season before? This tells you their rotation (or lack of one).</p>
+    <p><strong>Have they used any of these practices before?</strong> Many farmers already compost, intercrop, or use kraal manure — but don't call it "regenerative agriculture."</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 04 · AGROECOLOGICAL ZONES                                      -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="eye">04 · Context</div>
+  <h2>Agroecological Zones and Farming Systems</h2>
+
+  <p>Zambia has three major agroecological zones. The regenerative practices in this guide apply across all three, but the emphasis shifts depending on rainfall, soil type, and existing farming systems. Know your zone. Adapt accordingly.</p>
+
+  <table>
+    <tr>
+      <th>Zone</th>
+      <th>Rainfall</th>
+      <th>Key Provinces</th>
+      <th>Soils</th>
+      <th>Priority Practices</th>
+    </tr>
+    <tr>
+      <td><strong>Zone I</strong></td>
+      <td>Less than 800mm</td>
+      <td>Southern (valley areas), parts of Eastern, Lusaka lowveld</td>
+      <td>Often sandy, low organic matter, drought-prone</td>
+      <td>Water conservation, drought-tolerant crops (sorghum, pearl millet, cowpea), improved manure handling, minimum tillage</td>
+    </tr>
+    <tr>
+      <td><strong>Zone IIa</strong></td>
+      <td>800–1,000mm</td>
+      <td>Central, Southern (plateau), Eastern, Lusaka, parts of Western</td>
+      <td>Variable — sandy loams to clay loams. Moderate organic matter potential</td>
+      <td>Full intercropping systems, crop rotation, agroforestry, holistic grazing, composting</td>
+    </tr>
+    <tr>
+      <td><strong>Zone IIb &amp; III</strong></td>
+      <td>1,000–1,500mm+</td>
+      <td>Northern, Luapula, Copperbelt, Northwestern, parts of Western</td>
+      <td>Often acidic, leached, low phosphorus. Higher organic matter potential due to rainfall</td>
+      <td>Acidity management (lime, wood ash), cassava systems, legume cover crops, green manure, agroforestry</td>
+    </tr>
+  </table>
+
+  <h3>Common Production Constraints Across All Zones</h3>
+
+  <p><strong>Declining soil organic matter.</strong> The single most important constraint. Decades of monoculture maize with residue burning and clean tillage have reduced soil organic matter to below 1% in many fields. This is the foundation: low organic matter means low water-holding capacity, low nutrient availability, poor soil structure, and reduced biological activity. Everything in this guide starts from rebuilding organic matter.</p>
+
+  <p><strong>Soil acidity.</strong> Widespread in Zones IIb and III, and increasingly in Zone IIa after years of ammonium-based fertiliser application. Acid soils lock up phosphorus and reduce nitrogen availability. Lime application is ideal but often unavailable. Wood ash and legume residue incorporation are partial alternatives.</p>
+
+  <p><strong>Seasonal labour bottlenecks.</strong> Planting, weeding, and harvesting all peak in narrow windows. Practices that spread labour demand — dry-season land preparation, reduced weeding through mulch cover, pigeon pea that harvests in the dry season — are valued for this reason as much as for yield.</p>
+
+  <p><strong>Rainfall variability.</strong> Dry spells within the growing season are becoming more frequent and less predictable. Practices that improve soil water infiltration and retention — minimum tillage, mulching, organic matter building — are the most effective responses, more effective than variety selection alone.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 05 · SOIL HEALTH                                               -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 05 · Foundation</div>
+    <h3>Soil Health — The Starting Point for Everything</h3>
+    <p class="module-oneliner">Healthy soil biology unlocks mineral nutrition, holds water, suppresses disease, and reduces the need for purchased inputs.</p>
+
+    <h4>What It Is</h4>
+    <p>Soil health is the capacity of soil to function as a living system. It is not just chemistry (NPK levels) — it is biology. A teaspoon of healthy soil contains more microorganisms than there are people on Earth. These organisms — bacteria, fungi, protozoa, nematodes, earthworms — cycle nutrients, build soil structure, hold water, and suppress pathogens. When we kill soil biology through excessive tillage, burning, and chemical application, we break the system that feeds plants for free.</p>
+
+    <p>The single best indicator of soil health available to a field extension officer is <strong>soil organic matter (SOM)</strong>. SOM is the engine. It feeds the biology. The biology unlocks the minerals. The minerals feed the plant. Every practice in this guide, in one way or another, builds soil organic matter.</p>
+
+    <h4>Why It Matters Now</h4>
+    <p>Under FISP, declining SOM was masked by annual fertiliser application. The soil was degrading, but fertiliser compensated for lost natural fertility — at increasing cost and decreasing efficiency. As FISP phases out, the underlying soil degradation is exposed. Fields that received D-compound and urea for 15 years but had their residues burned and no organic returns may now have SOM below 0.8%. These soils cannot hold water, cannot hold nutrients, and cannot support the biology that makes natural fertility work. They are, functionally, dead.</p>
+
+    <p>The good news: soil biology recovers remarkably fast once you stop destroying it and start feeding it. Farmers at Mpanshya saw visible improvement in soil colour, earthworm populations, and water infiltration within two seasons of stopping burning and beginning mulch cover and manure application.</p>
+
+    <h4>Simple Field Assessment</h4>
+
+    <table>
+      <tr>
+        <th>Indicator</th>
+        <th>Healthy</th>
+        <th>Degraded</th>
+      </tr>
+      <tr>
+        <td><strong>Colour</strong> (top 15cm)</td>
+        <td>Dark brown to black</td>
+        <td>Pale grey, yellow-brown, reddish</td>
+      </tr>
+      <tr>
+        <td><strong>Earthworms</strong> (dig 30cm cube)</td>
+        <td>10+ per spade-depth</td>
+        <td>0–2 per spade-depth</td>
+      </tr>
+      <tr>
+        <td><strong>Water infiltration</strong></td>
+        <td>Water soaks in within seconds</td>
+        <td>Water pools, runs off, or crusts</td>
+      </tr>
+      <tr>
+        <td><strong>Soil smell</strong></td>
+        <td>Fresh, earthy (petrichor)</td>
+        <td>No smell, or sour/metallic</td>
+      </tr>
+      <tr>
+        <td><strong>Root depth</strong> (dig beside a plant)</td>
+        <td>Roots penetrate 30cm+ easily</td>
+        <td>Roots shallow, compacted at 10–15cm</td>
+      </tr>
+      <tr>
+        <td><strong>Crop residue breakdown</strong></td>
+        <td>Last season's residue mostly decomposed</td>
+        <td>Residue sits unchanged on surface for months</td>
+      </tr>
+    </table>
+
+    <h4>The Five Principles of Soil Health</h4>
+
+    <p>These principles are not sequential steps — they are simultaneous goals. Every field management decision should be evaluated against all five.</p>
+
+    <p><strong>1. Minimise soil disturbance.</strong> Every time you plough, you expose soil organic matter to oxygen and ultraviolet light, which accelerates decomposition and loss. You break fungal networks (mycorrhizae) that transport nutrients to plant roots. You destroy soil structure that took years to build. Minimum tillage — disturbing only the planting line — preserves what you have while you build more.</p>
+
+    <p><strong>2. Keep the soil covered.</strong> Bare soil is dying soil. Sun heats it, killing surface biology. Rain hits it directly, causing erosion and crusting. Wind removes fine particles. Cover — whether crop residue, mulch, a living cover crop, or tree shade — protects the surface, moderates temperature, reduces evaporation, and feeds biology as it decomposes.</p>
+
+    <p><strong>3. Keep living roots in the soil as long as possible.</strong> Roots feed soil biology through root exudates — sugars and proteins that plants leak into the soil to attract beneficial microorganisms. A field that is bare from June to November (the Zambian dry season) is a field with no root exudates for five months. Perennial crops, relay cropping, and tree integration extend the period of living roots.</p>
+
+    <p><strong>4. Maximise diversity.</strong> Monoculture feeds a narrow range of soil organisms. Diverse plantings — multiple crop species, legumes with cereals, trees with annuals — feed a diverse soil community. Diverse communities are more resilient. They suppress pathogens, cycle a wider range of nutrients, and recover faster from stress.</p>
+
+    <p><strong>5. Integrate animals.</strong> In natural ecosystems, animals graze, defecate, trample, and move on. This cycle is the fastest way to convert standing plant material into soil-feeding organic matter. Livestock integration — whether cattle, goats, chickens, or pigs — closes the nutrient loop in a way that no cropping system alone can match.</p>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"Your soil is like a bank account. Every season you grow a crop, you make a withdrawal. Fertiliser is like borrowing money from someone else to put in the account — it works, but you're always dependent on the loan. Organic matter is like earning your own income. It takes longer to build, but once it's there, the account grows by itself. Everything we're going to talk about is a way to start earning instead of borrowing."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 06 · IMPROVED MANURE HANDLING                                  -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 06 · Foundation</div>
+    <h3>Improved Manure Handling</h3>
+    <p class="module-oneliner">Most Zambian farmers with livestock waste up to 90% of their manure's nitrogen. Covering and strip-applying manure can multiply its fertiliser value by ten times.</p>
+
+    <h4>What It Is</h4>
+    <p>Improved Manure Handling (IMH) is a set of simple techniques to protect manure from sun and rain between the kraal and the field, and to apply it in concentrated strips rather than broadcasting. The sun drives off nitrogen as ammonia gas. Rain leaches out soluble nutrients. By covering manure during storage and applying it in narrow bands along the crop row, you retain the nutrients that would otherwise be lost — and you reduce the amount you need to haul by up to 90%, because you're applying concentrated manure only where roots can reach it.</p>
+
+    <h4>When to Use It</h4>
+
+    <div class="decision">
+      <div class="decision-title">Decision Guide</div>
+      <p><strong>Does the farmer have livestock?</strong> Even 2–3 cattle, a few goats, or a chicken house produce enough manure for a meaningful impact on a small field.</p>
+      <p><strong>Is the manure currently left exposed in the kraal or heaped in the open?</strong> If yes, this is the single highest-return intervention you can recommend. It costs almost nothing and the results are visible in the first season.</p>
+      <p><strong>Is the farmer currently hauling manure by ox-cart or head-load?</strong> Strip application reduces total volume by 80–90%, which directly reduces hauling labour — often the biggest barrier to manure use.</p>
+    </div>
+
+    <h4>How to Do It</h4>
+
+    <div class="steps">
+      <div class="step">
+        <strong>Cover the kraal or manure heap.</strong> Use whatever is locally available: grass thatch, old roofing sheets, maize stover, plastic sheeting. The goal is to keep direct sun and rain off the manure. A simple A-frame shelter made of poles and grass over the manure heap works. If the kraal itself can be partially roofed, even better.
+      </div>
+      <div class="step">
+        <strong>Add green material.</strong> Mix fresh green plant material (weeds, crop residues, legume cuttings) into the manure heap every time you add manure. This balances the carbon-to-nitrogen ratio and accelerates decomposition. A ratio of roughly 2 parts manure to 1 part green material works well.
+      </div>
+      <div class="step">
+        <strong>Turn the heap every 2–3 weeks.</strong> This aerates the material, prevents anaerobic conditions (which produce foul smells and lose nitrogen as ammonia), and speeds up composting. If labour is limited, even one turn during the dry season is better than none.
+      </div>
+      <div class="step">
+        <strong>Apply in strips, not broadcast.</strong> When planting, open a furrow or trench along the crop row. Apply manure in a band 10–15cm wide in the bottom of the row. Cover with soil. Plant on top or beside. The roots grow directly into the nutrient-rich zone.
+      </div>
+      <div class="step">
+        <strong>Apply twice if possible.</strong> Most of the nitrogen in manure is used up within 3–4 weeks of application. A second application at 4–6 weeks (timed with weeding so you can incorporate it) extends the nutrient supply through the critical growth period.
+      </div>
+    </div>
+
+    <h4>What to Expect</h4>
+
+    <p>Properly handled and strip-applied manure can deliver nitrogen availability equivalent to 50–100 kg/ha of urea, depending on the source animal, storage quality, and application method. Cattle manure is highest in volume but moderate in nitrogen. Chicken manure is lower in volume but highest in nitrogen and phosphorus. Pig manure is intermediate.</p>
+
+    <p>Visible results in the first season: darker green foliage in manured rows, increased plant height, improved grain fill. Over 2–3 seasons of consistent application, soil colour darkens, earthworm populations increase, and water infiltration improves measurably.</p>
+
+    <div class="compare">
+      <div class="compare-adv">
+        <div class="compare-label">Advantages</div>
+        <ul>
+          <li>Free. No purchased inputs required.</li>
+          <li>Reduces hauling labour by 80–90% through strip application.</li>
+          <li>Builds soil organic matter — cumulative benefit over seasons.</li>
+          <li>Provides phosphorus, potassium, and micronutrients, not just nitrogen.</li>
+          <li>Improves soil structure and water-holding capacity.</li>
+          <li>Feeds soil biology, which further enhances nutrient cycling.</li>
+        </ul>
+      </div>
+      <div class="compare-dis">
+        <div class="compare-label">Disadvantages</div>
+        <ul>
+          <li>Requires livestock. Farmers without animals need alternative organic matter sources (see Modules 07, 10, 22).</li>
+          <li>Heap management adds labour during the dry season.</li>
+          <li>Nutrient content is variable — not as precise as inorganic fertiliser.</li>
+          <li>Can introduce weed seeds if composting temperature is insufficient.</li>
+          <li>Cultural resistance in some areas where manure handling is seen as low-status work.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"You already have fertiliser in your kraal — you're just losing it to the sun and rain. If you cover your manure and apply it in the row instead of spreading it everywhere, the same amount of manure works ten times harder. You haul less because you concentrate it where the roots are. And unlike bagged fertiliser, it keeps improving your soil year after year."</p>
+    </div>
+
+    <div class="risk">
+      <div class="risk-title">What Can Go Wrong</div>
+      <p><strong>Carbon-nitrogen ratio too high.</strong> If the heap is mostly dry stover or woodchips with little manure or green material, decomposition stalls and nitrogen is temporarily locked up rather than released. The crop may actually show nitrogen deficiency in the first season. Fix: add more green material or fresh manure.</p>
+      <p><strong>Manure applied too deep.</strong> If buried more than 15cm, seedling roots can't reach it in the early growth stages when they need it most. Keep it in the top 10–15cm of the root zone.</p>
+      <p><strong>Manure applied too late.</strong> Applied after tasseling, the nutrients arrive when the plant has already set its yield potential. Best application is at or before planting, with a second dose at 4–6 weeks.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 07 · COMPOSTING AND GREEN MANURE                               -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 07 · Foundation</div>
+    <h3>Composting and Green Manure</h3>
+    <p class="module-oneliner">For farmers without livestock, composting crop residues and growing green manure crops are the primary pathways to building soil organic matter.</p>
+
+    <h4>What It Is</h4>
+    <p><strong>Composting</strong> is the controlled decomposition of plant material and household organic waste into stable humus that can be applied to the field. Unlike raw residue left on the surface, compost has already passed through the heat phase of decomposition — nutrients are stabilised, weed seeds are killed (if temperatures exceed 55°C), and the material is easy to handle and apply.</p>
+
+    <p><strong>Green manure</strong> is a crop grown specifically to be incorporated into the soil before or at flowering, adding fresh organic matter and — if the crop is a legume — biologically fixed nitrogen. The crop is not harvested for food or sale. It is grown to feed the soil.</p>
+
+    <h4>Composting — How to Do It</h4>
+
+    <div class="steps">
+      <div class="step">
+        <strong>Choose a shaded site</strong> near a water source if possible, protected from wind. Size: 1.5m × 1.5m × 1m high is sufficient for a smallholder household.
+      </div>
+      <div class="step">
+        <strong>Layer brown and green material.</strong> Brown material: dry maize stover, dry grass, leaves, straw. Green material: fresh weeds, kitchen scraps, legume cuttings, fresh grass. Alternate layers roughly 15cm thick. Aim for a ratio of about 3 parts brown to 1 part green by volume.
+      </div>
+      <div class="step">
+        <strong>Add water.</strong> The heap should be as moist as a wrung-out sponge. Too dry and decomposition stops. Too wet and it becomes anaerobic (smells bad, loses nitrogen).
+      </div>
+      <div class="step">
+        <strong>Turn every 2–3 weeks.</strong> Move material from outside to centre and vice versa. This aerates the heap and ensures even decomposition. The centre should feel hot to the touch during active decomposition.
+      </div>
+      <div class="step">
+        <strong>Compost is ready in 8–12 weeks</strong> under warm Zambian conditions. It's ready when it's dark, crumbly, smells earthy, and original materials are no longer recognisable.
+      </div>
+    </div>
+
+    <h4>Green Manure — Key Species for Zambia</h4>
+
+    <table>
+      <tr>
+        <th>Species</th>
+        <th>Zone</th>
+        <th>N Fixed (est. kg/ha)</th>
+        <th>Notes</th>
+      </tr>
+      <tr>
+        <td><strong>Velvet bean</strong> (Mucuna pruriens)</td>
+        <td>I, IIa, IIb</td>
+        <td>100–150</td>
+        <td>Very vigorous. Suppresses weeds. Can be relay-planted into maize. See Module 22 for detail.</td>
+      </tr>
+      <tr>
+        <td><strong>Sun hemp</strong> (Crotalaria juncea)</td>
+        <td>I, IIa, IIb</td>
+        <td>80–120</td>
+        <td>Fast growing. Good biomass producer. Incorporate at flowering before it becomes woody.</td>
+      </tr>
+      <tr>
+        <td><strong>Cowpea</strong> (dual purpose)</td>
+        <td>All</td>
+        <td>40–80</td>
+        <td>Harvest grain for food, incorporate residue. Not a pure green manure — but dual benefit is often more attractive to farmers.</td>
+      </tr>
+      <tr>
+        <td><strong>Pigeon pea</strong> (dual purpose)</td>
+        <td>I, IIa</td>
+        <td>40–100</td>
+        <td>Perennial roots continue fixing N between seasons. Prune at end of dry season, incorporate biomass. Harvest grain for food/sale. See Module 20.</td>
+      </tr>
+      <tr>
+        <td><strong>Tephrosia vogelii</strong></td>
+        <td>IIb, III</td>
+        <td>60–120</td>
+        <td>Also a natural pesticide (fish poison, stored grain protectant). Common in Northern/Northwestern Provinces.</td>
+      </tr>
+    </table>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"If you don't have animals, you can still build your soil. Every weed, every maize stalk, every bean plant — that's potential food for your soil. A compost heap turns waste into the best fertiliser you can get, and it costs you nothing but time. If you can also plant a green manure crop in the off-season or between your rows, you're fixing nitrogen from the air for free — the same nitrogen that's in the expensive urea bags."</p>
+    </div>
+
+    <div class="risk">
+      <div class="risk-title">What Can Go Wrong</div>
+      <p><strong>Farmer sees green manure as "wasting" land.</strong> Growing a crop you don't eat or sell feels wasteful. Counter this by emphasising dual-purpose species (cowpea, pigeon pea) where the farmer gets food AND soil improvement. Pure green manure crops are easier to accept as relay or intercrops, not sole crops.</p>
+      <p><strong>Compost heap dries out and stalls.</strong> In the Zambian dry season, without watering, the heap becomes inert. Locate near water if possible. Cover with grass to reduce moisture loss. Even partial composting is better than raw residue.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 08 · LAND PREPARATION AND MINIMUM TILLAGE                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 08 · Field Practice</div>
+    <h3>Land Preparation and Minimum Tillage</h3>
+    <p class="module-oneliner">The less you disturb the soil, the more biology, structure, and moisture you retain. Prepare only the planting line.</p>
+
+    <h4>What It Is</h4>
+    <p>Minimum tillage means reducing mechanical soil disturbance to the smallest area necessary for seed placement. Instead of ploughing the entire field (which inverts and aerates the full soil profile, destroying structure and biology), you prepare only the planting station — a hole, a furrow, or a narrow strip. The rest of the soil surface remains covered with residue from the previous crop.</p>
+
+    <p>This is not "Conservation Agriculture" as promoted by some programmes (which often came bundled with herbicide requirements that created new dependencies). This is simpler: don't plough what you don't need to plough. Keep the surface covered. Let the soil biology do the structural work that the plough was doing badly.</p>
+
+    <h4>Methods</h4>
+
+    <table>
+      <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Best For</th>
+        <th>Labour</th>
+      </tr>
+      <tr>
+        <td><strong>Planting basins</strong> (potholing)</td>
+        <td>Dig holes 15cm deep × 15cm wide at crop spacing. Apply manure/compost in the hole. Plant seed. Basin captures rainwater.</td>
+        <td>Zone I (dry areas). Sandy soils. Drought-prone fields.</td>
+        <td>High initial (can be done dry-season). Low subsequent seasons if basins are permanent.</td>
+      </tr>
+      <tr>
+        <td><strong>Rip-line</strong></td>
+        <td>Open a narrow furrow along the planting row using a ripper (ox-drawn or tractor). Plant in the rip-line. No full ploughing.</td>
+        <td>Zone IIa. Farmers with ox-draught. Medium-scale fields.</td>
+        <td>Low (mechanised). Requires ripper implement.</td>
+      </tr>
+      <tr>
+        <td><strong>Hand-hoe strip</strong></td>
+        <td>Use a hand hoe to clear and lightly till a strip 15–20cm wide along the planting row. Leave inter-row area undisturbed under residue cover.</td>
+        <td>All zones. Default method for hand-hoe farmers.</td>
+        <td>Moderate. Less than full tillage.</td>
+      </tr>
+      <tr>
+        <td><strong>Direct seed into mulch</strong></td>
+        <td>No tillage at all. Push seed into the soil through the mulch layer using a dibble stick or pointed stick. Works only when soil is moist and has good structure (requires 2+ seasons of organic matter building first).</td>
+        <td>Established regenerative fields with high SOM. Zone IIa and IIb.</td>
+        <td>Very low. But requires good soil condition.</td>
+      </tr>
+    </table>
+
+    <div class="compare">
+      <div class="compare-adv">
+        <div class="compare-label">Advantages</div>
+        <ul>
+          <li>Preserves soil structure and biology.</li>
+          <li>Retains moisture (covered soil evaporates 30–50% less).</li>
+          <li>Reduces erosion — covered surface absorbs raindrop impact.</li>
+          <li>Saves labour compared to full ploughing (except planting basins in year one).</li>
+          <li>Allows dry-season land preparation (basins, rip-lines) — spreading labour.</li>
+        </ul>
+      </div>
+      <div class="compare-dis">
+        <div class="compare-label">Disadvantages</div>
+        <ul>
+          <li>Weed pressure in the first 1–2 seasons can be higher without full tillage. Mulch cover reduces this over time.</li>
+          <li>Requires residue retention — farmers who burn or graze residues off the field cannot do minimum tillage effectively.</li>
+          <li>Heavy clay soils may need initial deep ripping to break compaction before switching to minimum tillage.</li>
+          <li>Some farmers perceive unploughed fields as "lazy" or "unkempt." Social pressure is real.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"When you plough the whole field, you're opening up the soil to the sun and destroying the life underground that feeds your crops. Try preparing only the row where you plant — a strip or a hole — and leaving the rest covered with last season's stalks. The covered soil holds water longer, the worms and fungi keep working, and over two or three seasons your soil gets easier to work, not harder. The first season you might see more weeds between the rows. By the third season, the mulch suppresses them."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 10 · INTERCROPPING SYSTEMS                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 10 · Field Practice</div>
+    <h3>Intercropping Systems</h3>
+    <p class="module-oneliner">Growing two or more crops together in the same field — not as a compromise, but as a system that outperforms monoculture in total value.</p>
+
+    <h4>What It Is</h4>
+    <p>Intercropping is the deliberate cultivation of two or more crop species in the same field during the same season, arranged so that they complement rather than compete with each other. Done well, an intercrop system produces more total food, income, and soil benefit per hectare than either crop grown alone — even if the yield of the main crop (usually maize) is slightly lower.</p>
+
+    <p>This is not random mixed planting. It is designed. The species are chosen for complementary root depths, nutrient needs, growth periods, and canopy architecture. The most proven system for Zambian smallholders is the <strong>maize–pigeon pea intercrop</strong>, but many other combinations work depending on zone and farmer objectives.</p>
+
+    <h4>Key Systems for Zambia</h4>
+
+    <table>
+      <tr>
+        <th>System</th>
+        <th>Zone</th>
+        <th>Layout</th>
+        <th>Expected Outcome</th>
+      </tr>
+      <tr>
+        <td><strong>Maize + Pigeon pea</strong></td>
+        <td>I, IIa</td>
+        <td>Plant pigeon pea in the same hole as maize, same day. Pigeon pea grows slowly under maize canopy, then takes over after maize harvest. Maize at 90cm × 30cm. Pigeon pea every other hole.</td>
+        <td>Maize yield: 80–95% of sole crop. Pigeon pea yield: 200–700 kg/ha. Pigeon pea fixes 40–100 kg N/ha. Cash from pigeon pea: K500–1,500/ha. System replants pigeon pea once every 3 years (perennial ratoon).</td>
+      </tr>
+      <tr>
+        <td><strong>Maize + Cowpea</strong></td>
+        <td>All</td>
+        <td>Cowpea planted between maize rows 2–3 weeks after maize emergence. Spreading varieties preferred (ground cover).</td>
+        <td>Maize yield: 85–95% of sole crop. Cowpea yield: 200–400 kg/ha. Ground cover suppresses weeds and reduces erosion. Residue is high-quality livestock feed.</td>
+      </tr>
+      <tr>
+        <td><strong>Maize + Velvet bean (relay)</strong></td>
+        <td>I, IIa, IIb</td>
+        <td>Velvet bean planted 4–6 weeks after maize, in the inter-row. After maize harvest, velvet bean covers the field through the dry season.</td>
+        <td>Maize yield: 90–100% of sole crop (planted before competition). Velvet bean biomass: massive — up to 10 t/ha dry matter. Fixes 100–150 kg N/ha. Complete weed suppression. See Module 22.</td>
+      </tr>
+      <tr>
+        <td><strong>Sorghum + Groundnut</strong></td>
+        <td>I, IIa</td>
+        <td>Alternating rows. Sorghum at wider spacing (75cm rows). Groundnut fills inter-row.</td>
+        <td>Sorghum yield: 85–90% of sole crop. Groundnut yield: 60–80% of sole crop. Diversified food and income. Good for drier areas where maize is risky.</td>
+      </tr>
+      <tr>
+        <td><strong>Polyculture vegetables</strong></td>
+        <td>IIa (irrigated)</td>
+        <td>Rows of different vegetable families planted adjacent: solanaceae (tomato/eggplant), brassicaceae (cabbage/broccoli), amaranthaceae (spinach/rape), legumes (beans/peas), alliums (onion). Rotated every 2–3 weeks in strip succession.</td>
+        <td>Pest suppression through diversity. Continuous harvest. Labour-intensive but very high value per m². This is Sebastian Scott's vegetable system at Old Orchard Farm, Kafue.</td>
+      </tr>
+    </table>
+
+    <h4>Establishment Cost — Maize + Pigeon Pea (per hectare)</h4>
+
+    <p>Approximately 15 kg pigeon pea seed per hectare. Cost: K100–200 from farmers who already grow it, K200–400 from seed companies. Planting labour: 1 person-day to plant 1 hectare (planted in the same hole as maize at the same time — negligible extra time). Seed is purchased once every 3 years because pigeon pea ratoons from the root for 2–3 seasons after initial planting. This is one of the lowest-cost, highest-return interventions available.</p>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"Your grandmother probably grew maize and beans together. There's a reason. Different crops work together underground — one fixes nitrogen, one has deep roots, one covers the soil. You might get a little less maize, but the total food and money from the field goes up. Pigeon pea is the best partner for maize: you plant it on the same day in the same hole, it doesn't compete until after you've harvested your maize, and then it gives you protein, firewood, livestock feed, and cash. The roots keep feeding your soil through the dry season. One planting lasts three years."</p>
+    </div>
+
+    <div class="risk">
+      <div class="risk-title">What Can Go Wrong</div>
+      <p><strong>Pigeon pea competes with maize in a good rainfall year.</strong> In years with above-average rainfall, both crops grow vigorously and may compete for light. Manage by maintaining recommended spacing and pruning pigeon pea if it shades maize before tasseling.</p>
+      <p><strong>Spacing too tight.</strong> The single biggest intercropping mistake. If you reduce spacing to "fit more in," both crops suffer. Maintain the main crop's recommended spacing and fit the companion crop into the existing pattern.</p>
+      <p><strong>Wrong combination for the zone.</strong> Cowpea in Zone I can fail in drought years because it needs moisture during its pod-filling stage. Match the intercrop to the rainfall pattern.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 11 · CROP ROTATION                                             -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 11 · Field Practice</div>
+    <h3>Crop Rotation Design</h3>
+    <p class="module-oneliner">Changing what you grow in a field each season breaks pest and disease cycles, balances nutrient draw, and builds soil health — at no cost.</p>
+
+    <h4>What It Is</h4>
+    <p>Crop rotation is the practice of growing different crops in sequence on the same field across seasons. At minimum, it means not growing the same crop in the same field two years in a row. At best, it is a designed multi-year plan that alternates cereal crops (which draw heavily on nitrogen) with legume crops (which fix nitrogen), deep-rooted crops with shallow-rooted crops, and high-residue crops with low-residue crops.</p>
+
+    <h4>Why It Matters</h4>
+    <p>Continuous maize — planting maize in the same field every season — is the default in much of Zambia. It is also one of the most soil-degrading practices. Maize extracts the same nutrients from the same soil depth year after year, feeds the same pest and disease organisms, and produces residue with a high carbon-to-nitrogen ratio that decomposes slowly. After 5–10 years of continuous maize, yields decline even with fertiliser application. This is called "yield fatigue" and it is widespread across Southern and Central Provinces.</p>
+
+    <h4>Practical Rotation Plans</h4>
+
+    <p><strong>Two-year rotation (minimum, any zone):</strong> Year 1: Maize (or sorghum). Year 2: Legume (groundnut, cowpea, soybean). Repeat. Even this simple alternation can improve maize yields by 20–30% compared to continuous maize, through nitrogen fixation and pest cycle disruption.</p>
+
+    <p><strong>Three-year rotation (Zone IIa, recommended):</strong> Year 1: Maize + pigeon pea intercrop. Year 2: Groundnut or soybean (sole crop). Year 3: Sorghum or sunflower. Return to maize + pigeon pea. This rotation diversifies income (three different cash/food crops), breaks Striga and stem-borer cycles, and provides two years of nitrogen fixation out of three.</p>
+
+    <p><strong>Four-year rotation (Zone IIa/IIb, with livestock):</strong> Year 1: Maize + pigeon pea. Year 2: Groundnut. Year 3: Improved fallow (velvet bean or sun hemp green manure, with grazing). Year 4: Sorghum or millet. Return to maize + pigeon pea. The fallow year is the soil-building year. If the farmer cannot afford to leave a field out of production, the velvet bean fallow can be relay-planted into the previous season's crop (see Module 22).</p>
+
+    <div class="decision">
+      <div class="decision-title">Decision Guide</div>
+      <p><strong>Farmer only has one field?</strong> Split it into 2 or 3 blocks and rotate within the field. Even on 1 hectare, a 3-block rotation is possible.</p>
+      <p><strong>Farmer says "maize is the only crop I can sell"?</strong> Show the cash value of groundnut, pigeon pea, and soybean. In many markets, groundnut sells for K3,000–5,000 per 50kg bag versus K150–250 for maize. The rotation crop may be worth more than the maize.</p>
+      <p><strong>Farmer has persistent Striga?</strong> Rotate with trap crops (soybean, groundnut) and avoid maize on that field for at least two seasons. Striga seed remains viable in soil for 15+ years — rotation doesn't eliminate it, but it reduces infestation pressure.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 12 · AGROFORESTRY                                              -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 12 · Field Practice</div>
+    <h3>Agroforestry Integration</h3>
+    <p class="module-oneliner">Trees in the farming system provide nitrogen, shade, fuel, fodder, fruit, timber, and the longest-term soil organic matter investment a farmer can make.</p>
+
+    <h4>What It Is</h4>
+    <p>Agroforestry is the intentional integration of trees or woody perennials with crops and/or livestock on the same land. Trees are not competitors for crops — they are infrastructure. Their roots access water and nutrients at depths no annual crop can reach. Their leaf fall returns those nutrients to the surface. Their shade moderates temperature extremes. Their roots create channels that improve water infiltration long after the tree is gone.</p>
+
+    <h4>Key Species for Zambia</h4>
+
+    <table>
+      <tr>
+        <th>Species</th>
+        <th>Type</th>
+        <th>Zone</th>
+        <th>Primary Benefit</th>
+        <th>Secondary Benefits</th>
+      </tr>
+      <tr>
+        <td><strong>Faidherbia albida</strong></td>
+        <td>Large tree</td>
+        <td>I, IIa</td>
+        <td>Fixes nitrogen. Drops leaves in the rainy season (reverse phenology) — so it does NOT shade crops when they need light.</td>
+        <td>Pods are excellent livestock feed. Deep roots bring up water and nutrients. The single most valuable agroforestry tree for Zambia.</td>
+      </tr>
+      <tr>
+        <td><strong>Gliricidia sepium</strong></td>
+        <td>Small/medium tree</td>
+        <td>IIa, IIb, III</td>
+        <td>Nitrogen-fixing. Fast growing. Coppices well (cut and regrows).</td>
+        <td>Green leaf manure (prune branches, apply leaves to crop rows). Live fencing. Firewood from coppiced branches.</td>
+      </tr>
+      <tr>
+        <td><strong>Sesbania sesban</strong></td>
+        <td>Short-lived tree</td>
+        <td>All</td>
+        <td>Very fast nitrogen fixer. Grows 3–5m in first year.</td>
+        <td>Improved fallow species — plant, grow for 2 years, cut and incorporate. Excellent for rehabilitating degraded fields.</td>
+      </tr>
+      <tr>
+        <td><strong>Moringa oleifera</strong></td>
+        <td>Small tree</td>
+        <td>I, IIa</td>
+        <td>Nutritional — leaves are a high-protein, high-vitamin food source.</td>
+        <td>Grows fast, tolerates dry conditions, seeds produce oil. Valuable household nutrition tree. Not a nitrogen fixer.</td>
+      </tr>
+      <tr>
+        <td><strong>Fruit trees (mango, guava, citrus, avocado)</strong></td>
+        <td>Variable</td>
+        <td>Zone-dependent</td>
+        <td>Income and nutrition diversification.</td>
+        <td>Long-term investment. Shade for livestock. Boundary markers. 3–5 years to first fruit depending on species.</td>
+      </tr>
+    </table>
+
+    <p><strong>Faidherbia albida deserves special attention.</strong> It is the only common tree in southern Africa that sheds its leaves at the start of the rainy season and leafs out in the dry season. This means crops growing under Faidherbia receive full sunlight during the growing season, while benefiting from nitrogen-rich leaf litter and improved soil beneath the canopy. Studies across southern Africa have shown maize yields 100–400% higher under mature Faidherbia canopy compared to open field. The tree is native to Zambia and widely distributed — many fields already have individual Faidherbia trees that farmers can protect and propagate.</p>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"Trees are the longest investment you can make in your farm. A Faidherbia tree takes 5–8 years to mature, but once it's there, it fertilises your soil and feeds your livestock for your lifetime and your children's lifetime. It's the only tree that drops its leaves when your crops are growing — so it gives you shade in the dry season when you need it, and sunlight in the rainy season when your maize needs it. If you already have one in your field, protect it. If you don't, plant seedlings now and your field will be different in five years."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 13 · HOLISTIC GRAZING                                          -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 13 · Livestock</div>
+    <h3>Holistic Grazing Management</h3>
+    <p class="module-oneliner">Moving livestock frequently at high density — then giving the land long rest — restores degraded grassland faster than any other single intervention.</p>
+
+    <h4>What It Is</h4>
+    <p>Holistic grazing (also called adaptive multi-paddock grazing) concentrates livestock at high density in a small area for a short time — often just hours to a few days — then moves them to a new area, allowing the grazed area a long recovery period (30–90 days depending on season and growth rate). This mimics the natural pattern of wild grazing herds: intense grazing, heavy hoof impact that pushes seed and organic matter into the soil, concentrated manure deposition, then departure.</p>
+
+    <p>The key difference from conventional free-range grazing: <strong>the length of recovery, not the intensity of grazing.</strong> Continuous grazing at low density is what degrades land — animals selectively eat the most palatable grasses, which get weaker and eventually die out, leaving unpalatable species and bare ground. Short intense grazing followed by long rest allows palatable grasses to recover and thicken.</p>
+
+    <h4>The Mpanshya Model</h4>
+    <p>At Mpanshya near Rufunsa, multiple smallholder farmers combined their cattle into a communal herd managed under holistic grazing principles. The results, documented by CIFOR-ICRAF, were dramatic: previously barren Kafue floodplain areas recovered to deep green grass within two seasons. In silvopastoral areas — cattle grazed between trees — mushrooms appeared, fruit tree yields increased, and wildlife returned. The community manages the herd rotation collectively, with the head herder making daily movement decisions based on grass recovery.</p>
+
+    <p>This communal model is Zambia's contribution to global grazing innovation. It solves the fundamental problem of holistic grazing on smallholdings: one farmer with five cattle cannot create meaningful herd impact. Fifty farmers with five cattle each, managed as one herd of 250, can.</p>
+
+    <h4>How to Do It</h4>
+
+    <div class="steps">
+      <div class="step">
+        <strong>Organise a communal herd.</strong> This requires social agreement. Start with willing households. A minimum viable herd is 30–50 animals. Agree on a herder (paid or rotated), rules for joining and leaving, and disease management (dipping, vaccination).
+      </div>
+      <div class="step">
+        <strong>Divide the grazing area into paddocks</strong> using mobile electric fencing, cut brush, or natural boundaries (streams, treelines). Number of paddocks depends on herd size and area — aim for at least 8–10 paddocks to allow sufficient recovery time.
+      </div>
+      <div class="step">
+        <strong>Graze each paddock for 1–3 days maximum</strong> (shorter in the growing season when grass recovery is fast, up to 3 days in the dry season). The grass should be grazed down but not to bare ground. Cattle should be slightly hungry when moved — this ensures even grazing rather than selective grazing.
+      </div>
+      <div class="step">
+        <strong>Do not return to a paddock until the grass has fully recovered.</strong> In the rainy season: 30–45 days. In the dry season: 60–90 days or more. This is the crucial discipline. Returning too early is what kills the system.
+      </div>
+      <div class="step">
+        <strong>Stop burning.</strong> This is non-negotiable. Fire destroys the very organic matter and seed bank that the grazing system is building. The transition to holistic grazing must include a community agreement to stop seasonal burning.
+      </div>
+    </div>
+
+    <div class="compare">
+      <div class="compare-adv">
+        <div class="compare-label">Advantages</div>
+        <ul>
+          <li>Restores degraded grassland visibly within 1–2 seasons.</li>
+          <li>Increases livestock carrying capacity of the land over time.</li>
+          <li>Concentrates manure deposition — free, targeted fertilisation.</li>
+          <li>Reduces cattle disease through rotation (breaking parasite cycles).</li>
+          <li>Builds soil organic matter through hoof impact and manure.</li>
+          <li>In silvopastoral systems: increased fruit, mushrooms, biodiversity.</li>
+        </ul>
+      </div>
+      <div class="compare-dis">
+        <div class="compare-label">Disadvantages</div>
+        <ul>
+          <li>Requires community organisation and social agreement — the hardest part.</li>
+          <li>Needs fencing or herding labour for paddock management.</li>
+          <li>Takes 2–3 seasons to see full benefits — patience required.</li>
+          <li>Fire management requires community-wide enforcement, not just individual compliance.</li>
+          <li>Communal herd model raises disease transmission risk if not managed with dipping/vaccination.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"Your cattle are your best soil builders — but only if they move. When cattle graze the same area all year, they eat the good grasses down to nothing and ignore the rest. The good grasses die. The land goes bare. But if you put all the cattle together in one small area for a day or two, then move them and don't come back for a month or two, the grass grows back thicker and stronger than before. The hooves push seeds into the ground. The manure feeds the soil. At Mpanshya, farmers who did this saw their grazing land come back to life in two seasons. But it only works if you stop burning."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 14 · LIVESTOCK INTEGRATION                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 14 · Livestock</div>
+    <h3>Livestock Integration — Chickens, Pigs, Small Ruminants</h3>
+    <p class="module-oneliner">Animals are not a separate enterprise — they are mobile soil improvement tools, pest controllers, and income diversifiers.</p>
+
+    <h4>What It Is</h4>
+    <p>In a regenerative farming system, livestock are integrated into the cropping system, not managed separately. Chickens follow cattle through paddocks to scratch apart manure and eat parasite larvae. Pigs are moved through harvested fields in mobile enclosures to till, weed, and fertilise the soil. Goats browse fence lines and field edges, controlling bush encroachment. Each animal plays a role in nutrient cycling, pest management, and soil building.</p>
+
+    <h4>Chickens</h4>
+    <p>Free-range chickens in cropping areas control insects (including termites and grasshoppers), scratch and incorporate surface organic matter, and deposit high-nitrogen manure. A mobile chicken house or "chicken tractor" — a simple frame with wire mesh that is moved across the field — concentrates these benefits. Move the chicken tractor every 1–2 days. 10–20 chickens in a 3m × 2m tractor can prepare a 6m² patch per day. Eggs and meat provide household income throughout the year.</p>
+
+    <h4>Pigs</h4>
+    <p>Sebastian Scott's "pig tractor" system uses a 12m × 4m mobile cage with 10–12 weaner pigs, moved once daily across fields after harvest. The pigs root out weeds and crop residue, break soil crust, deposit concentrated manure, and eat pest larvae. A single pass of the pig tractor replaces hand-hoeing for land preparation. The pigs gain weight on crop residues and weeds, converting low-value biomass into high-value pork. This system requires secure fencing (pigs are escape artists) and daily water provision.</p>
+
+    <h4>Goats</h4>
+    <p>Managed goats are valuable for bush clearing, boundary maintenance, and milk/meat production. Tethered rotational grazing (moving the tether point daily) provides targeted browsing without crop damage. Goat manure is high in nitrogen and can be collected from night pens for use in improved manure handling.</p>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"Your chickens aren't just for eggs and meat. Put them in the field and they eat the insects that eat your crops. Their manure is the strongest natural fertiliser there is. If you can build a simple movable cage — poles, wire, and grass roof — you can move your chickens across your field and they prepare it for you. Same with pigs after harvest. The animals work for you while they feed."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 15 · PEST AND DISEASE MANAGEMENT                               -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 15 · Protection</div>
+    <h3>Pest and Disease Management Without Chemicals</h3>
+    <p class="module-oneliner">Healthy soil grows healthy plants. Diverse fields confuse pests. Animals eat what's left. Chemicals are the last resort, not the first.</p>
+
+    <h4>The Regenerative Approach to Pest Management</h4>
+    <p>In a conventional system, pest management means identifying the pest and applying the appropriate chemical. In a regenerative system, pest management is mostly built into the system design. Diverse plantings break pest cycles. Healthy soil produces plants with stronger natural defences. Integrated livestock eat pest larvae. Crop rotation prevents pest population buildup. The "management" happens before the pest arrives, not after.</p>
+
+    <p>This does not mean zero pest damage. It means economically manageable pest damage — damage low enough that the cost of intervention exceeds the value of the crop saved. Sebastian Scott reports negligible crop damage from Tuta absoluta (tomato leaf miner) on his polyculture vegetable system because "there is no big block of tomatoes that attract the moths and through which the worms can work their way."</p>
+
+    <h4>System-Level Defences</h4>
+
+    <p><strong>Diversity.</strong> Pest species are typically host-specific. A field with six crop species presents a confusing landscape for a pest adapted to one. The pest's search time increases, its reproduction rate decreases, and natural predators (which thrive in diverse environments) suppress what remains.</p>
+
+    <p><strong>Soil health.</strong> Plants growing in biologically active soil with adequate nutrition produce more defensive compounds (secondary metabolites). Silicon uptake — enhanced by mycorrhizal fungi in healthy soil — physically strengthens cell walls against chewing insects. This is not theory — it is measurable.</p>
+
+    <p><strong>Rotation.</strong> Soil-borne pathogens and stem-boring insects build up when the same crop is planted repeatedly. A single season of a non-host crop can reduce pest populations dramatically. Two seasons of non-host crops can eliminate some pests entirely from the field.</p>
+
+    <p><strong>Beneficial insects.</strong> Wasps, spiders, frogs, birds, and predatory beetles are the farmer's allies. Polyculture fields with diverse flowering plants (including "weeds") support these predator populations. Chemical application kills predators alongside pests, removing the natural control mechanism.</p>
+
+    <h4>Fall Armyworm — The Priority Pest</h4>
+
+    <p>Fall armyworm (Spodoptera frugiperda) arrived in Zambia in 2016 and is now the single most cited pest concern. Chemical control is partially effective but expensive and environmentally damaging. Regenerative approaches that reduce FAW impact include: early planting (larger plants tolerate damage better), intercropping with legumes (particularly push-pull systems with Desmodium and Brachiaria where available), maintaining healthy soil (well-nourished plants recover faster), encouraging natural predators, and hand-picking in small fields (labour-intensive but effective at low infestation levels).</p>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"The best way to fight pests is to not create the conditions they love. Pests love big blocks of one crop. They love weak plants in tired soil. They love fields with no birds, no spiders, no wasps. When you grow different crops together, build your soil, and let the natural enemies do their work, most pest problems become small problems. You'll still see some damage — that's normal. But the damage is manageable, and you're not spending money on chemicals that kill the good insects along with the bad ones."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 16 · WATER MANAGEMENT                                          -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 16 · Protection</div>
+    <h3>Water Management and Soil Moisture Conservation</h3>
+    <p class="module-oneliner">You cannot control rainfall. You can control how much of it stays in your soil.</p>
+
+    <h4>What It Is</h4>
+    <p>Water management on rainfed smallholder farms is not about irrigation. It is about maximising the amount of rain that enters the soil profile (infiltration), minimising the amount that runs off the surface (erosion), and reducing the amount that evaporates from bare soil (conservation). The most effective water management practices are the ones already described in this guide: minimum tillage, soil cover, organic matter building, and planting basins. This module brings them together as a water management strategy.</p>
+
+    <h4>The Water Budget</h4>
+    <p>In Zone I (less than 800mm rainfall), a farmer may receive 600mm in a season. If 30% runs off (bare, compacted soil), 20% evaporates from the surface, and 10% drains below the root zone, only 40% — 240mm — is available to the crop. That may not be enough. If the same farmer covers the soil with mulch (reducing evaporation by half), maintains good soil structure (reducing runoff to 10%), and has adequate organic matter (increasing root-zone water holding capacity), available water rises to 70% — 420mm. That is often enough, even in a dry year.</p>
+
+    <h4>Key Practices</h4>
+
+    <p><strong>Mulch cover.</strong> The single most effective water conservation practice. A layer of crop residue (maize stover, grass, legume residue) 5–10cm deep reduces soil temperature by 5–10°C, cuts evaporation by 30–50%, and prevents surface crusting that causes runoff. Do not burn residues. Do not remove them for livestock unless alternative feed is available.</p>
+
+    <p><strong>Contour planting.</strong> On sloping land, plant rows along the contour (perpendicular to the slope), not up and down. Each row acts as a mini-barrier that slows water flow and gives it time to soak in. For slopes above 5%, combine contour planting with contour bunds or grass strips (vetiver, Napier) every 10–20 metres.</p>
+
+    <p><strong>Planting basins.</strong> In Zone I, planting basins (see Module 08) act as micro-catchments. Each basin captures runoff from the surrounding soil surface and concentrates it where the plant roots are. In very dry conditions, basins can be the difference between crop establishment and failure.</p>
+
+    <p><strong>Organic matter building.</strong> Every 1% increase in soil organic matter increases water-holding capacity by approximately 20,000 litres per hectare. This is the invisible reservoir. It takes 2–5 seasons to build measurably, but it compounds — each season of organic matter addition improves the next season's water availability.</p>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"You can't control the rain. But you can control how much rain your soil keeps. Covered soil holds water. Bare soil loses it. If you keep last season's maize stalks on the field instead of burning them, your soil stays cooler and wetter longer. If you add manure and compost every season, your soil holds more water every year — like a sponge getting bigger. In a dry spell, the farmer with covered, healthy soil will keep growing while the farmer with bare, tired soil is watching his crop wilt."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 17 · MAIZE                                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 17 · Crops</div>
+    <h3>Maize in a Regenerative System</h3>
+    <p class="module-oneliner">Maize is still the staple. In a regenerative system, it performs better — not despite lower inputs, but because the soil is working.</p>
+
+    <h4>Context</h4>
+    <p>Maize will remain central to Zambian farming for the foreseeable future. This guide does not argue against growing maize. It argues against growing maize in a system that depends on purchased inputs and destroys the soil's capacity to feed the crop naturally. The question is not "maize or no maize?" It is "maize within what system?"</p>
+
+    <h4>Regenerative Maize Yield Potential</h4>
+    <p>National average maize yield for Zambian smallholders: 1.5–2.0 tonnes per hectare with FISP inputs. Sebastian Scott, using zero inorganic fertiliser, zero pesticides, and zero machinery, achieved 16 tonnes per hectare in a CIMMYT-monitored trial season. That is an extreme outlier achieved on a well-developed system farm. Realistic targets for a farmer transitioning to regenerative practices:</p>
+
+    <table>
+      <tr>
+        <th>Transition Stage</th>
+        <th>Expected Yield</th>
+        <th>Notes</th>
+      </tr>
+      <tr>
+        <td><strong>Season 1</strong> (transition year)</td>
+        <td>1.0–2.0 t/ha</td>
+        <td>May dip if removing fertiliser without adequate organic matter in place. Mitigate by starting IMH and intercropping simultaneously.</td>
+      </tr>
+      <tr>
+        <td><strong>Season 2–3</strong></td>
+        <td>2.0–3.5 t/ha</td>
+        <td>Organic matter building begins to deliver. Nitrogen from legume rotations/intercrops kicks in. Soil biology recovering.</td>
+      </tr>
+      <tr>
+        <td><strong>Season 4+</strong> (established system)</td>
+        <td>3.5–6.0 t/ha</td>
+        <td>Healthy soil, active biology, integrated livestock, functional rotation. Yields continue to climb as SOM builds.</td>
+      </tr>
+    </table>
+
+    <h4>Bridging the Transition</h4>
+    <p>The hardest period is Season 1–2, when the farmer has reduced or eliminated purchased fertiliser but the soil has not yet recovered enough to compensate. This is where the extension officer's credibility is at stake. Be honest: <strong>"The first season may not show improvement. By the third season, you will."</strong></p>
+
+    <p>Strategies to bridge the gap: use improved manure handling from day one (Module 06). Intercrop with pigeon pea from day one (Module 10). If any fertiliser is available, use small targeted amounts (less than 50 kg/ha) as a supplement, not a replacement — placed in the planting basin or strip alongside manure. This is not a contradiction. It is pragmatism. The goal is to wean off external inputs, not to stop cold.</p>
+
+    <div class="risk">
+      <div class="risk-title">What Can Go Wrong</div>
+      <p><strong>Yield drops in year one and the farmer abandons the approach.</strong> This is the most common failure. Prevent it by: (1) recommending the farmer try on a portion of their field, not the whole area, (2) setting realistic expectations explicitly — "this is a three-season investment," (3) pairing with IMH and intercropping so the total system value (maize + pigeon pea + improved soil) exceeds the monoculture value even if maize yield alone is lower.</p>
+    </div>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"I'm not asking you to stop growing maize. I'm asking you to grow it differently — with a partner crop, with manure in the row, with your stalks left on the field. The first year, you might not see a big change. But by the third year, your soil will be darker, hold more water, and your maize will grow taller on its own. Farmers at Kafue who did this are now out-yielding commercial farms — without buying a single bag of fertiliser. Try it on a quarter of your field this season. Keep the rest the way you normally do. Compare them side by side."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 20 · PIGEON PEA AND COWPEA                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 20 · Crops</div>
+    <h3>Pigeon Pea and Cowpea</h3>
+    <p class="module-oneliner">The two crops that do the most work for the least cost in a Zambian regenerative system — food, cash, soil nitrogen, and livestock feed from a single planting.</p>
+
+    <h4>Pigeon Pea (Cajanus cajan)</h4>
+    <p>Pigeon pea is the single most valuable crop for Zambian regenerative agriculture. It fixes nitrogen (40–100 kg/ha), produces high-protein grain (16–24% protein) for food and sale, provides dry-season browse for livestock, produces firewood from pruned branches, and its deep taproot breaks compacted soil layers and accesses water and nutrients at depths no cereal can reach. It is perennial — plant once, harvest for three years from the same root. After three years, cut at ground level, incorporate the woody material, and replant.</p>
+
+    <h4>Economics</h4>
+    <p>Establishment: 15 kg seed/ha at K100–400. Planting labour: negligible (planted in the same hole as maize). Annual yield in maize intercrop: 200–700 kg/ha. Market price: K5–15/kg (varies by market access). Cash return: K500–1,500/ha/year from a crop that cost almost nothing to establish and requires no inputs. The pigeon pea market exists in Zambia — it is bought domestically and exported to India. There is currently a seed supply constraint in some areas; identify local sources or connect farmers with seed companies.</p>
+
+    <h4>Cowpea (Vigna unguiculata)</h4>
+    <p>Cowpea is faster-maturing (60–90 days), drought-tolerant, and dual-purpose: grain for human consumption and residue for high-quality livestock feed. It fixes nitrogen (40–80 kg/ha) and its spreading growth habit provides ground cover that suppresses weeds. Less cash value than pigeon pea in most markets, but more immediately useful for food security — especially in the hungry season when early-maturing cowpea varieties can be harvested while maize is still growing.</p>
+
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Pigeon Pea</th>
+        <th>Cowpea</th>
+      </tr>
+      <tr>
+        <td>Maturity</td>
+        <td>150–270 days (harvest dry season)</td>
+        <td>60–90 days (harvest mid-season)</td>
+      </tr>
+      <tr>
+        <td>Life cycle</td>
+        <td>Perennial (3-year ratoon)</td>
+        <td>Annual</td>
+      </tr>
+      <tr>
+        <td>Drought tolerance</td>
+        <td>Very high (deep taproot)</td>
+        <td>High</td>
+      </tr>
+      <tr>
+        <td>Market value</td>
+        <td>High (K5–15/kg)</td>
+        <td>Moderate (K3–8/kg)</td>
+      </tr>
+      <tr>
+        <td>Best intercrop role</td>
+        <td>Same-hole with maize; takes over after harvest</td>
+        <td>Inter-row ground cover; fast filler</td>
+      </tr>
+      <tr>
+        <td>Soil benefit</td>
+        <td>Deep root restructuring + N fixation + biomass</td>
+        <td>N fixation + ground cover + residue quality</td>
+      </tr>
+    </table>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"Pigeon pea is the hardest-working crop in Zambia. You plant it once in the same hole as your maize — no extra work. It grows slowly under the maize, then keeps growing after you've harvested. You get protein your family can eat, grain you can sell for good money, firewood, and livestock feed. Meanwhile it's fixing nitrogen in your soil and its roots are breaking up the hard layer your plough created. It comes back from the root for three years. Where else can you invest K200 and earn K500–1,500 every year for three years?"</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 22 · VELVET BEAN                                               -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 22 · Crops</div>
+    <h3>Velvet Bean as a System Component</h3>
+    <p class="module-oneliner">The most aggressive soil builder available to Zambian farmers — but a tool, not a crop. Understand what it does and how to manage it.</p>
+
+    <h4>What It Is</h4>
+    <p>Velvet bean (Mucuna pruriens) is a vigorous tropical legume that produces massive biomass (up to 10 tonnes dry matter per hectare), fixes 100–150 kg nitrogen per hectare, and completely suppresses weeds including Striga through allelopathic effects and physical smothering. It is not grown primarily for food (raw seeds contain L-DOPA and must be processed before consumption), though some communities do eat processed velvet bean. Its value is as a green manure and soil rehabilitation tool.</p>
+
+    <h4>How to Use It</h4>
+    <p><strong>Relay into standing maize.</strong> Plant velvet bean seed 4–6 weeks after maize emergence, in the inter-row. The velvet bean grows slowly under the maize canopy. After maize harvest, the velvet bean explodes, covering the field completely through the dry season. Before the next planting season, slash or roll the velvet bean biomass and plant directly into the mulch.</p>
+
+    <p><strong>Striga rehabilitation.</strong> On fields heavily infested with Striga (witchweed), a one-season sole crop of velvet bean can dramatically reduce the Striga seed bank through allelopathic suppression. Follow with a non-host crop (groundnut) before returning to maize.</p>
+
+    <p><strong>Degraded land recovery.</strong> On exhausted fields with SOM below 1%, a single season of velvet bean adds more organic matter than three seasons of manure application. It is the fastest reset button available.</p>
+
+    <div class="risk">
+      <div class="risk-title">What Can Go Wrong</div>
+      <p><strong>Velvet bean takes over.</strong> This plant is extremely vigorous. If not slashed before seed set, it will self-seed and become a management problem. Slash or roll before pods mature. Do not let it go to seed unless you want it to return.</p>
+      <p><strong>Farmer resists "wasting" a season.</strong> The relay system avoids this — the maize crop is still harvested normally. The velvet bean occupies the field only during the dry season when nothing else would be growing anyway.</p>
+      <p><strong>Livestock eat the biomass.</strong> If livestock have free access to the field, they will consume the velvet bean, removing the organic matter before it can be incorporated. Fence or manage access.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 23 · FARMING AS A BUSINESS AFTER FISP                          -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="module">
+    <div class="module-num">Module 23 · Business</div>
+    <h3>Farming as a Business After FISP</h3>
+    <p class="module-oneliner">When subsidised inputs disappear, the farmer who depends on them is exposed. The farmer who grows multiple crops with minimal purchased inputs has a more resilient business.</p>
+
+    <h4>The FISP Business Model (Ending)</h4>
+    <p>Under FISP, many farmers operated on a simple calculation: receive subsidised inputs (worth K2,000–3,000), apply them to maize, harvest 2–4 tonnes, sell or consume. The subsidy masked the true cost of production. Without FISP, the same farmer buying inputs at market price faces costs of K5,000–8,000/ha (seed, D-compound, urea, herbicide). At current maize prices (K150–250/50kg bag), a yield of 3 tonnes returns K9,000–15,000 gross. After input costs, the margin is thin — and in a bad rainfall year, it can be negative.</p>
+
+    <h4>The Regenerative Business Model</h4>
+    <p>A regenerative system changes the cost structure fundamentally:</p>
+
+    <table>
+      <tr>
+        <th>Input</th>
+        <th>Conventional (per ha)</th>
+        <th>Regenerative (per ha)</th>
+      </tr>
+      <tr>
+        <td>Seed (maize)</td>
+        <td>K400–600</td>
+        <td>K400–600 (same)</td>
+      </tr>
+      <tr>
+        <td>Seed (intercrop — pigeon pea)</td>
+        <td>—</td>
+        <td>K100–200 (once per 3 years)</td>
+      </tr>
+      <tr>
+        <td>Fertiliser</td>
+        <td>K3,000–5,000</td>
+        <td>K0 (manure, legume N)</td>
+      </tr>
+      <tr>
+        <td>Herbicide</td>
+        <td>K500–800</td>
+        <td>K0 (mulch, hand weeding)</td>
+      </tr>
+      <tr>
+        <td>Pesticide</td>
+        <td>K200–500</td>
+        <td>K0 (system design)</td>
+      </tr>
+      <tr>
+        <td><strong>Total input cost</strong></td>
+        <td><strong>K4,100–6,900</strong></td>
+        <td><strong>K500–800</strong></td>
+      </tr>
+    </table>
+
+    <p>Even if regenerative maize yield is initially lower (say 2 t/ha vs 3 t/ha conventional), the net income can be higher because the cost base is 80–90% lower. And the regenerative farmer has additional income from pigeon pea (K500–1,500/ha), groundnut (in rotation year), eggs, and vegetables. Total system income per hectare, across all products and seasons, typically exceeds monoculture maize income by the second or third year.</p>
+
+    <h4>Multiple Income Streams Across the Calendar</h4>
+
+    <table>
+      <tr>
+        <th>Month</th>
+        <th>Conventional Maize Income</th>
+        <th>Regenerative System Income</th>
+      </tr>
+      <tr>
+        <td>Jan–Mar</td>
+        <td>None (growing season)</td>
+        <td>Eggs, vegetables (irrigated garden)</td>
+      </tr>
+      <tr>
+        <td>Apr–May</td>
+        <td>Maize harvest (bulk sale, low price)</td>
+        <td>Maize harvest + early cowpea harvest</td>
+      </tr>
+      <tr>
+        <td>Jun–Aug</td>
+        <td>None</td>
+        <td>Pigeon pea harvest, dry-season vegetables, egg sales</td>
+      </tr>
+      <tr>
+        <td>Sep–Nov</td>
+        <td>None (hungry season, may sell stored maize at loss)</td>
+        <td>Pigeon pea (late harvest), moringa leaves, groundnut (if stored), livestock sales</td>
+      </tr>
+    </table>
+
+    <div class="farmer-talk">
+      <div class="farmer-talk-title">What to Tell the Farmer</div>
+      <p>"When fertiliser was subsidised, buying it made sense. Without the subsidy, it's your biggest cost — and it goes up every year. What if your biggest cost became nearly zero? That's what happens when your soil feeds your crops instead of a bag from the depot. You still work hard. But the money you earn stays with you instead of going to the input supplier. And because you're growing three or four different crops instead of one, you have something to sell or eat in every month of the year — not just at harvest time when everyone else is selling too and the price is lowest."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                         -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="guide-footer">
+  <p><strong>Munda</strong> · A Regenerative Field Guide for Zambian Extension Officers</p>
+  <p>What works. What doesn't. What to try next.</p>
+  <p style="margin-top: 1.5rem;">Grassroots Trust · Kafue, Zambia · 2026</p>
+  <p style="margin-top: 1rem;">Version 0.1 · Working Draft</p>
+  <p style="margin-top: 1.5rem; font-size: 0.8rem;">Practices described are based on field experience at Grassroots Trust (Kafue), Mpanshya community (Rufunsa), and documented trials monitored by CIMMYT and CIFOR-ICRAF. Yield ranges reflect Zambian conditions in Agroecological Zones I and IIa. Results vary by soil type, rainfall, and management quality. This guide is not a substitute for site-specific agronomic advice.</p>
+</div>
+
+</body>
+</html>
