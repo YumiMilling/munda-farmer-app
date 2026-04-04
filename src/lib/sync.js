@@ -1,0 +1,172 @@
+import { supabase } from './supabase'
+
+// Device ID — persistent per browser
+function getDeviceId() {
+  let id = localStorage.getItem('munda-device-id')
+  if (!id) {
+    id = 'dev-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7)
+    localStorage.setItem('munda-device-id', id)
+  }
+  return id
+}
+
+const SYNC_QUEUE_KEY = 'munda-sync-queue'
+
+function getQueue() {
+  try { return JSON.parse(localStorage.getItem(SYNC_QUEUE_KEY) || '[]') }
+  catch { return [] }
+}
+
+function setQueue(q) {
+  localStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(q))
+}
+
+// Queue an operation for sync when online
+export function queueSync(table, operation, data) {
+  const q = getQueue()
+  q.push({ table, operation, data, queuedAt: new Date().toISOString() })
+  setQueue(q)
+  // Try to sync immediately if online
+  if (navigator.onLine) processQueue()
+}
+
+// Process all queued operations
+export async function processQueue() {
+  const q = getQueue()
+  if (q.length === 0) return
+
+  const failed = []
+  for (const item of q) {
+    try {
+      if (item.operation === 'upsert') {
+        const { error } = await supabase.from(item.table).upsert(item.data)
+        if (error) throw error
+      } else if (item.operation === 'insert') {
+        const { error } = await supabase.from(item.table).insert(item.data)
+        if (error) throw error
+      } else if (item.operation === 'delete') {
+        const { error } = await supabase.from(item.table).delete().eq('id', item.data.id)
+        if (error) throw error
+      }
+    } catch (e) {
+      console.warn('Sync failed for', item.table, e.message)
+      failed.push(item)
+    }
+  }
+  setQueue(failed)
+  return failed.length === 0
+}
+
+// Pull all data from Supabase (for initial load / refresh)
+export async function pullAll() {
+  const deviceId = getDeviceId()
+  const results = { groups: null, hosts: null, observations: null }
+
+  try {
+    const { data: groups } = await supabase.from('ffs_groups').select('*').order('name')
+    if (groups) results.groups = groups
+
+    const { data: hosts } = await supabase.from('ffs_hosts').select('*').order('name')
+    if (hosts) results.hosts = hosts
+
+    const { data: obs } = await supabase.from('ffs_observations').select('*').order('date', { ascending: false })
+    if (obs) results.observations = obs
+  } catch (e) {
+    console.warn('Pull failed:', e.message)
+  }
+
+  return results
+}
+
+// Push a new observation
+export function pushObservation(obs) {
+  const deviceId = getDeviceId()
+  const row = {
+    id: obs.id,
+    device_id: deviceId,
+    date: obs.date,
+    group_id: obs.groupId || null,
+    host_id: obs.hostId || null,
+    meeting_type: obs.meetingType,
+    practice: obs.practice,
+    practice_other: obs.practiceOther || null,
+    attendance: obs.attendance ? parseInt(obs.attendance) : null,
+    lat: obs.lat ? parseFloat(obs.lat) : null,
+    lng: obs.lng ? parseFloat(obs.lng) : null,
+    gps_acc: obs.gpsAcc ? parseInt(obs.gpsAcc) : null,
+    same_size: obs.sameSize || null,
+    one_var: obs.oneVar || null,
+    vis_diff: obs.visDiff || null,
+    group_saw: obs.groupSaw || null,
+    fac_saw: obs.facSaw || null,
+    problems: obs.problems || null,
+    yield_a: obs.yieldA ? parseFloat(obs.yieldA) : null,
+    yield_b: obs.yieldB ? parseFloat(obs.yieldB) : null,
+    price: obs.price ? parseFloat(obs.price) : null,
+    cost_a: obs.costA ? parseFloat(obs.costA) : null,
+    cost_b: obs.costB ? parseFloat(obs.costB) : null,
+  }
+
+  if (navigator.onLine) {
+    // Try direct push, fall back to queue
+    supabase.from('ffs_observations').upsert(row).then(({ error }) => {
+      if (error) {
+        console.warn('Direct push failed, queuing:', error.message)
+        queueSync('ffs_observations', 'upsert', row)
+      }
+    })
+  } else {
+    queueSync('ffs_observations', 'upsert', row)
+  }
+}
+
+// Push a host farmer
+export function pushHost(host, groupId) {
+  const row = {
+    id: host.id,
+    group_id: groupId,
+    name: host.name,
+    practice: host.practice || '',
+    year: host.year || '2026',
+  }
+
+  if (navigator.onLine) {
+    supabase.from('ffs_hosts').upsert(row).then(({ error }) => {
+      if (error) queueSync('ffs_hosts', 'upsert', row)
+    })
+  } else {
+    queueSync('ffs_hosts', 'upsert', row)
+  }
+}
+
+// Push group update
+export function pushGroup(group) {
+  const row = { id: group.id, name: group.name, area: group.area || '' }
+
+  if (navigator.onLine) {
+    supabase.from('ffs_groups').upsert(row).then(({ error }) => {
+      if (error) queueSync('ffs_groups', 'upsert', row)
+    })
+  } else {
+    queueSync('ffs_groups', 'upsert', row)
+  }
+}
+
+// Delete a host
+export function deleteHost(hostId) {
+  if (navigator.onLine) {
+    supabase.from('ffs_hosts').delete().eq('id', hostId).then(({ error }) => {
+      if (error) queueSync('ffs_hosts', 'delete', { id: hostId })
+    })
+  } else {
+    queueSync('ffs_hosts', 'delete', { id: hostId })
+  }
+}
+
+// Auto-sync when coming back online
+if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    console.log('Back online — syncing queue...')
+    processQueue()
+  })
+}
