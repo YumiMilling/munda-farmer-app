@@ -24,15 +24,16 @@ export default function App() {
     return () => subscription.unsubscribe()
   }, [])
 
-  // Loading
-  if (session === undefined) {
-    return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Source Sans 3', system-ui, sans-serif", color: "#7A746B" }}>Loading...</div>
-  }
-
-  // Not logged in
-  if (!session) {
-    return <Login />
-  }
+  // TODO: Re-enable auth gates once login/signup flow is complete
+  // // Loading
+  // if (session === undefined) {
+  //   return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Source Sans 3', system-ui, sans-serif", color: "#7A746B" }}>Loading...</div>
+  // }
+  //
+  // // Not logged in
+  // if (!session) {
+  //   return <Login />
+  // }
 
   const isAdmin = profile?.role === 'admin'
 
