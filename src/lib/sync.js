@@ -79,11 +79,13 @@ export async function pullAll() {
 }
 
 // Push a new observation
-export function pushObservation(obs) {
+export async function pushObservation(obs) {
   const deviceId = getDeviceId()
+  const { data: { user } } = await supabase.auth.getUser()
   const row = {
     id: obs.id,
     device_id: deviceId,
+    user_id: user?.id || null,
     date: obs.date,
     group_id: obs.groupId || null,
     host_id: obs.hostId || null,
@@ -105,6 +107,29 @@ export function pushObservation(obs) {
     price: obs.price ? parseFloat(obs.price) : null,
     cost_a: obs.costA ? parseFloat(obs.costA) : null,
     cost_b: obs.costB ? parseFloat(obs.costB) : null,
+    has_pests: obs.hasPests || false,
+    pests: obs.pests || [],
+    pest_other: obs.pestOther || null,
+    has_diseases: obs.hasDiseases || false,
+    diseases: obs.diseases || [],
+    disease_other: obs.diseaseOther || null,
+    has_sprayed: obs.hasSprayed || false,
+    spray_product: obs.sprayProduct || null,
+    spray_plot: obs.sprayPlot || null,
+    has_fertiliser: obs.hasFertiliser || false,
+    fert_type: obs.fertType || null,
+    fert_plot: obs.fertPlot || null,
+    weeding_done: obs.weedingDone || null,
+    weeding_count: obs.weedingCount ? parseInt(obs.weedingCount) : null,
+    weed_pressure: obs.weedPressure || null,
+    drought_stress: obs.droughtStress || false,
+    drought_plot: obs.droughtPlot || null,
+    crop_vigour: obs.cropVigour || null,
+    soil_moisture: obs.soilMoisture || null,
+    germination: obs.germination || null,
+    stover_burned: obs.stoverBurned || null,
+    pigeon_pea_standing: obs.pigeonPeaStanding || null,
+    next_season_discussed: obs.nextSeasonDiscussed || false,
   }
 
   if (navigator.onLine) {

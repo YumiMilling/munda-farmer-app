@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "../lib/supabase";
+import { signOut } from "../lib/auth";
 
 const C = {
   ochre: "#B8622D", ochrePale: "#F0DCC8",
@@ -175,6 +176,8 @@ export default function Admin() {
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <span style={{ fontSize: 11, color: C.mid }}>{lastRefresh ? "Updated " + lastRefresh.toLocaleTimeString() : ""}</span>
           <button onClick={loadData} style={{ padding: "6px 14px", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, fontFamily: font, cursor: "pointer", background: C.ochre, color: "#fff" }}>Refresh</button>
+          <a href="/" style={{ fontSize: 12, color: C.mid, textDecoration: "none" }}>Field view</a>
+          <button onClick={signOut} style={{ padding: "6px 14px", border: "1px solid " + C.mid + "44", borderRadius: 6, fontSize: 12, fontWeight: 600, fontFamily: font, cursor: "pointer", background: "transparent", color: C.mid }}>Logout</button>
         </div>
       </div>
 
