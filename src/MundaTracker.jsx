@@ -39,7 +39,7 @@ const PRACTICES = ["Manure handling","Fertiliser comparison","Variety comparison
 const PESTS = ["Fall armyworm","Stalk borer","Aphids","Termites","Grasshoppers","Other"];
 const DISEASES = ["Grey leaf spot","Maize streak virus","Rust","Leaf blight","Root rot","Other"];
 
-const KEYS = {consent:"munda-consent",groups:"munda-groups",hosts:"munda-hosts",obs:"munda-obs"};
+const KEYS = {consent:"munda-consent",groups:"munda-groups",hosts:"munda-hosts",obs:"munda-obs",facilitator:"munda-facilitator",syncPending:"munda-sync-pending"};
 function ld(k){try{const r=localStorage.getItem(k);return r?JSON.parse(r):null}catch{return null}}
 function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){console.error(e)}}
 function uid(){return crypto.randomUUID?.() || Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
@@ -175,9 +175,85 @@ function ConsentScreen({ onOk }) {
   );
 }
 
+// ── Onboarding Wizard ──
+function OnboardingWizard({ onComplete, existingGroups }) {
+  const [step, setStep] = useState(0);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [groups, setGroups] = useState(existingGroups.length > 0 ? existingGroups : []);
+  const [newGroupName, setNewGroupName] = useState("");
+  const [newGroupArea, setNewGroupArea] = useState("");
+
+  function addGroup() {
+    if (!newGroupName.trim()) return;
+    setGroups([...groups, { id: uid(), name: newGroupName.trim(), area: newGroupArea.trim() }]);
+    setNewGroupName(""); setNewGroupArea("");
+  }
+
+  function finish() {
+    onComplete({ name: name.trim(), phone: phone.trim(), groups });
+  }
+
+  const totalSteps = 3;
+
+  if (step === 0) return (
+    <StepShell step={1} total={totalSteps} title="What's your name?" subtitle="So Seb knows who's submitting observations." onNext={() => setStep(1)} nextDisabled={!name.trim()} accent={T.ochre}>
+      <Field label="Full name">
+        <Input placeholder="e.g. John Mwale" value={name} onChange={e => setName(e.target.value)} autoFocus />
+      </Field>
+      <Field label="Phone number (optional)">
+        <Input type="tel" placeholder="e.g. 0977..." value={phone} onChange={e => setPhone(e.target.value)} />
+      </Field>
+    </StepShell>
+  );
+
+  if (step === 1) return (
+    <StepShell step={2} total={totalSteps} title="Your FFS groups" subtitle="Add the farmer groups you facilitate. You can always edit these later in Setup." onBack={() => setStep(0)} onNext={() => setStep(2)} nextDisabled={groups.length === 0} accent={T.ochre}>
+      {groups.map((g, i) => (
+        <div key={g.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", background: T.greenLight, border: `1.5px solid ${T.green}`, borderRadius: T.radiusSm, marginBottom: 8 }}>
+          <span style={{ color: T.green, fontWeight: 700 }}>{i + 1}</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: T.text }}>{g.name}</div>
+            {g.area && <div style={{ fontSize: 12, color: T.textSec }}>{g.area}</div>}
+          </div>
+          <button onClick={() => setGroups(groups.filter(x => x.id !== g.id))} style={{ background: "none", border: "none", color: T.red, cursor: "pointer", fontSize: 18 }}>x</button>
+        </div>
+      ))}
+      <div style={{ background: T.surface, border: `1.5px dashed ${T.border}`, borderRadius: T.radiusSm, padding: 14, marginTop: 8 }}>
+        <Field label="Group name"><Input placeholder="e.g. Kafue East" value={newGroupName} onChange={e => setNewGroupName(e.target.value)} /></Field>
+        <Field label="Area / location (optional)"><Input placeholder="e.g. Chilanga District" value={newGroupArea} onChange={e => setNewGroupArea(e.target.value)} /></Field>
+        <button onClick={addGroup} disabled={!newGroupName.trim()} style={{ padding: "10px 20px", border: "none", borderRadius: T.radiusSm, fontSize: 14, fontWeight: 700, fontFamily: T.font, cursor: newGroupName.trim() ? "pointer" : "default", background: newGroupName.trim() ? T.ochre : T.border, color: "#fff" }}>+ Add group</button>
+      </div>
+    </StepShell>
+  );
+
+  return (
+    <StepShell step={3} total={totalSteps} title="You're all set" subtitle="You can start logging observations. Add host farmers as you go." onBack={() => setStep(1)} onNext={finish} nextLabel="Start using Munda" accent={T.green}>
+      <div style={{ background: T.surface, borderRadius: T.radius, border: `1px solid ${T.border}`, overflow: "hidden" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", padding: "14px 16px", borderBottom: `1px solid ${T.borderLight}`, fontSize: 14 }}>
+          <span style={{ color: T.textSec }}>Facilitator</span>
+          <span style={{ fontWeight: 600 }}>{name}</span>
+        </div>
+        {phone && <div style={{ display: "flex", justifyContent: "space-between", padding: "14px 16px", borderBottom: `1px solid ${T.borderLight}`, fontSize: 14 }}>
+          <span style={{ color: T.textSec }}>Phone</span>
+          <span style={{ fontWeight: 600 }}>{phone}</span>
+        </div>}
+        <div style={{ display: "flex", justifyContent: "space-between", padding: "14px 16px", fontSize: 14 }}>
+          <span style={{ color: T.textSec }}>Groups</span>
+          <span style={{ fontWeight: 600 }}>{groups.length}</span>
+        </div>
+      </div>
+      <div style={{ marginTop: 20, padding: 16, background: T.ochreLight, borderRadius: T.radiusSm, fontSize: 14, lineHeight: 1.6, color: T.textSec }}>
+        <strong style={{ color: T.ochre }}>How this works:</strong> 1 farmer, 1 question, 2 plots. Same size, same seed, same everything — except the one thing being tested. You visit 3 times per season: pre-season setup, mid-season check, post-harvest review.
+      </div>
+    </StepShell>
+  );
+}
+
 // ── Observation Wizard ──
 function ObsWizard({ groups, hosts, onSave, onCancel }) {
-  const blank = { id: uid(), date: new Date().toISOString().slice(0, 10), groupId: "", hostId: "", meetingType: "", practice: "", practiceOther: "", attendance: "", lat: "", lng: "", gpsAcc: "", sameSize: "", oneVar: "", visDiff: "", groupSaw: "", facSaw: "", problems: "", hasPests: false, pests: [], pestOther: "", hasDiseases: false, diseases: [], diseaseOther: "", hasSprayed: false, sprayProduct: "", sprayPlot: "", hasFertiliser: false, fertType: "", fertPlot: "", fertWhen: "", weedingDone: "", weedingCount: "", weedPressure: "", droughtStress: false, droughtPlot: "", cropVigour: "", soilMoisture: "", germination: "", hasYield: false, yieldA: "", yieldB: "", price: "", costA: "", costB: "", unit: "ha", stoverBurned: "", pigeonPeaStanding: "", nextSeasonDiscussed: false };
+  const facName = ld(KEYS.facilitator)?.name || "";
+  const blank = { id: uid(), date: new Date().toISOString().slice(0, 10), facilitatorName: facName, groupId: "", hostId: "", meetingType: "", practice: "", practiceOther: "", attendance: "", location: "", lat: "", lng: "", gpsAcc: "", variety: "", legume: "", plantingDate: "", plotADesc: "", plotBDesc: "", researchQuestion: "", sameSize: "", oneVar: "", visDiff: "", groupSaw: "", facSaw: "", problems: "", fieldwork: "", cropCondition: "", hasPests: false, pests: [], pestOther: "", hasDiseases: false, diseases: [], diseaseOther: "", hasSprayed: false, sprayProduct: "", sprayPlot: "", hasFertiliser: false, fertType: "", fertPlot: "", fertWhen: "", weedingDone: "", weedingCount: "", weedPressure: "", droughtStress: false, droughtPlot: "", cropVigour: "", soilMoisture: "", germination: "", hasYield: false, yieldA: "", yieldB: "", legYieldA: "", legYieldB: "", price: "", legPrice: "", costA: "", costB: "", unit: "ha", stoverBurned: "", pigeonPeaStanding: "", nextSeasonDiscussed: false };
   const [f, setF] = useState(blank);
   const [step, setStep] = useState(0);
   const [gps, setGps] = useState("idle");
@@ -186,6 +262,7 @@ function ObsWizard({ groups, hosts, onSave, onCancel }) {
   const set = (k, v) => setF(p => ({ ...p, [k]: v }));
   const gH = hosts.filter(h => h.groupId === f.groupId);
   const mt = f.meetingType;
+  const isPre = mt === "pre";
   const isMid = mt === "mid";
   const isPost = mt === "post";
   const isMidOrPost = isMid || isPost;
@@ -193,8 +270,8 @@ function ObsWizard({ groups, hosts, onSave, onCancel }) {
   // Build step sequence based on meeting type
   const steps = ["group", "meeting", "gps"];
   if (f.groupId && gH.length > 0) steps.splice(1, 0, "host");
-  if (isMidOrPost) steps.push("practice");
-  if (isMidOrPost) steps.push("comparison");
+  if (isPre) steps.push("practice", "setup");
+  if (isMidOrPost) steps.push("practice", "comparison");
   if (isMid) steps.push("health");
   if (isMidOrPost) steps.push("observations");
   if (isPost) steps.push("yield");
@@ -241,9 +318,9 @@ function ObsWizard({ groups, hosts, onSave, onCancel }) {
 
   return (
     <StepShell step={step + 1} total={total} title={
-      { group: "Which group?", host: "Which host farmer?", meeting: "What type of visit?", gps: "Location & attendance", practice: "What is being tested?", comparison: "Comparison check", health: "Crop health", observations: "What did you see?", yield: "Yield measurements", postharvest: "After harvest", review: "Review & save" }[cur]
+      { group: "Which group?", host: "Which host farmer?", meeting: "What type of visit?", gps: "Location & attendance", practice: "What is being tested?", setup: "Plot setup", comparison: "Comparison check", health: "Crop health", observations: "What did you see?", yield: "Yield measurements", postharvest: "After harvest", review: "Review & save" }[cur]
     } subtitle={
-      { group: "Select the farmer group you're visiting", host: "Select the host farmer for this trial", meeting: "This determines which fields you'll fill in", gps: "Optional GPS and attendance count", practice: "What practice is the comparison trial testing?", comparison: "Checking the trial methodology is sound", health: "Pests, diseases, weeds, moisture", observations: "Record what farmers and you observed", yield: "Plot yields for gross margin analysis", postharvest: "Residue management and next steps", review: "Check everything before saving" }[cur]
+      { group: "Select the farmer group you're visiting", host: "Select the host farmer for this trial", meeting: "This determines which fields you'll fill in", gps: "Optional GPS and attendance count", practice: "What practice is the comparison trial testing?", setup: "Record the planting details and plot descriptions", comparison: "Checking the trial methodology is sound", health: "Pests, diseases, weeds, moisture", observations: "Record what farmers and you observed", yield: "Plot yields for gross margin analysis", postharvest: "Residue management and next steps", review: "Check everything before saving" }[cur]
     } onBack={step > 0 ? back : onCancel} onNext={cur === "review" ? handleSave : next} nextLabel={cur === "review" ? (saved ? "✓ Saved" : "Save observation") : "Continue"} nextDisabled={!canNext() || saved} accent={cur === "review" ? T.ochre : T.green}>
 
       {/* ── GROUP ── */}
@@ -280,18 +357,59 @@ function ObsWizard({ groups, hosts, onSave, onCancel }) {
             </div>
           </button>
         </Field>
+        <Field label="Village / location name">
+          <Input placeholder="e.g. Chilanga, Kafue East" value={f.location} onChange={e => set("location", e.target.value)} />
+        </Field>
         <Field label="How many people attended?">
           <Input type="number" placeholder="Number of attendees" value={f.attendance} onChange={e => set("attendance", e.target.value)} />
         </Field>
       </>}
 
       {/* ── PRACTICE ── */}
-      {cur === "practice" && (
-        <Field>
+      {cur === "practice" && <>
+        <Field label="Practice being tested">
           <Select options={PRACTICES} value={f.practice} onChange={v => set("practice", v)} placeholder="Select practice being tested..." />
           {f.practice === "Other" && <div style={{ marginTop: 10 }}><Input placeholder="Describe what's being tested" value={f.practiceOther} onChange={e => set("practiceOther", e.target.value)} /></div>}
         </Field>
-      )}
+        <Field label="Research question">
+          <div style={{ fontSize: 12, color: T.textTer, marginBottom: 6 }}>The one question this FFS is answering this season.</div>
+          <Input placeholder='e.g. "Does covered manure increase yield vs uncovered?"' value={f.researchQuestion} onChange={e => set("researchQuestion", e.target.value)} />
+        </Field>
+      </>}
+
+      {/* ── PRE-SEASON SETUP ── */}
+      {cur === "setup" && <>
+        <Field label="Variety (main crop)">
+          <Input placeholder="e.g. SC 513, Pool 16, ZMS 606" value={f.variety} onChange={e => set("variety", e.target.value)} />
+        </Field>
+        <Field label="Legume (if intercropped)">
+          <Input placeholder="e.g. Velvet bean, cowpea, groundnut — or leave blank" value={f.legume} onChange={e => set("legume", e.target.value)} />
+        </Field>
+        <Field label="Planting date">
+          <Input type="date" value={f.plantingDate} onChange={e => set("plantingDate", e.target.value)} />
+        </Field>
+        <Divider />
+        <Field label="Plot A — control (farmer's normal practice)">
+          <div style={{ fontSize: 12, color: T.textTer, marginBottom: 6 }}>Describe what the farmer normally does. Include rates.</div>
+          <TextArea placeholder='e.g. "1 bottle top per 2 plants = 100kg fert/ha, no manure"' value={f.plotADesc} onChange={e => set("plotADesc", e.target.value)} />
+        </Field>
+        <Field label="Plot B — treatment (what's different)">
+          <div style={{ fontSize: 12, color: T.textTer, marginBottom: 6 }}>Describe what's being changed. Include rates.</div>
+          <TextArea placeholder='e.g. "1 bucket compost = 5t/ha + 100kg urea"' value={f.plotBDesc} onChange={e => set("plotBDesc", e.target.value)} />
+        </Field>
+
+        {/* Quick reference */}
+        <details style={{ marginTop: 12, fontSize: 13, color: T.textSec, cursor: "pointer" }}>
+          <summary style={{ fontWeight: 700, color: T.ochre, padding: "8px 0" }}>Standard rates — quick reference</summary>
+          <div style={{ padding: "10px 0", lineHeight: 1.8 }}>
+            <strong>Fertiliser:</strong> 1 bottle top/plant = 200 kg/ha · 1 bottle top/2 plants = 100 kg/ha<br />
+            <strong>Compost:</strong> 1 x 20L bucket per plot = 5 t/ha<br />
+            <strong>Green manure:</strong> 25 kg fresh weight per plot = 6,600 kg/ha<br />
+            <strong>Lime:</strong> 3.75 kg per plot = 1 t/ha<br />
+            <strong>Plot size:</strong> 7.5m x 5m = 37.5 m²
+          </div>
+        </details>
+      </>}
 
       {/* ── COMPARISON CHECK ── */}
       {cur === "comparison" && <>
@@ -362,6 +480,15 @@ function ObsWizard({ groups, hosts, onSave, onCancel }) {
 
       {/* ── OBSERVATIONS ── */}
       {cur === "observations" && <>
+        <Field label="Field work done since last visit">
+          <div style={{ fontSize: 12, color: T.textTer, marginBottom: 6 }}>Weeding, spraying, fertiliser application — on which plots, when.</div>
+          <TextArea placeholder="e.g. Both plots weeded 15 Jan. Plot B sprayed for FAW 20 Jan." value={f.fieldwork} onChange={e => set("fieldwork", e.target.value)} />
+        </Field>
+        <Field label="Crop condition">
+          <div style={{ fontSize: 12, color: T.textTer, marginBottom: 6 }}>Height, colour, stand count, vigour — anything visible between the two plots.</div>
+          <TextArea placeholder="e.g. Plot B taller, darker green, fewer gaps" value={f.cropCondition} onChange={e => set("cropCondition", e.target.value)} />
+        </Field>
+        <Divider />
         <Field label="What did the GROUP notice?">
           <div style={{ fontSize: 12, color: T.textTer, marginBottom: 6 }}>Their words, not yours.</div>
           <TextArea placeholder="What farmers said about the difference between plots..." value={f.groupSaw} onChange={e => set("groupSaw", e.target.value)} />
@@ -371,6 +498,7 @@ function ObsWizard({ groups, hosts, onSave, onCancel }) {
           <TextArea placeholder="Your professional observations..." value={f.facSaw} onChange={e => set("facSaw", e.target.value)} />
         </Field>
         <Field label="Any problems?">
+          <div style={{ fontSize: 12, color: T.textTer, marginBottom: 6 }}>Livestock damage, drought, waterlogging, anything that affected plots.</div>
           <TextArea placeholder="Issues, things that went wrong..." value={f.problems} onChange={e => set("problems", e.target.value)} />
         </Field>
       </>}
@@ -384,12 +512,24 @@ function ObsWizard({ groups, hosts, onSave, onCancel }) {
             {["ha", "lima"].map(u => <button key={u} onClick={() => set("unit", u)} style={{ flex: 1, padding: 10, border: "none", fontSize: 13, fontWeight: 700, fontFamily: T.font, cursor: "pointer", background: f.unit === u ? T.ochre : T.surfaceAlt, color: f.unit === u ? "#fff" : T.textSec }}>{u === "ha" ? "Per hectare (×267)" : "Per lima (×67)"}</button>)}
           </div>
 
+          <div style={{ fontSize: 12, fontWeight: 700, color: T.textTer, letterSpacing: 0.8, marginBottom: 8, textTransform: "uppercase" }}>Grain yield (dried & shelled)</div>
           <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-            <Field label="Plot A yield (kg)"><Input type="number" step="0.1" placeholder="kg" value={f.yieldA} onChange={e => set("yieldA", e.target.value)} /></Field>
-            <Field label="Plot B yield (kg)"><Input type="number" step="0.1" placeholder="kg" value={f.yieldB} onChange={e => set("yieldB", e.target.value)} /></Field>
+            <Field label="Plot A grain (kg)"><Input type="number" step="0.1" placeholder="kg from 7.5x5m plot" value={f.yieldA} onChange={e => set("yieldA", e.target.value)} /></Field>
+            <Field label="Plot B grain (kg)"><Input type="number" step="0.1" placeholder="kg from 7.5x5m plot" value={f.yieldB} onChange={e => set("yieldB", e.target.value)} /></Field>
           </div>
 
+          {f.legume && <>
+            <div style={{ fontSize: 12, fontWeight: 700, color: T.textTer, letterSpacing: 0.8, marginBottom: 8, textTransform: "uppercase" }}>Legume yield (if intercropped)</div>
+            <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
+              <Field label="Plot A legume (kg)"><Input type="number" step="0.1" placeholder="kg — optional" value={f.legYieldA} onChange={e => set("legYieldA", e.target.value)} /></Field>
+              <Field label="Plot B legume (kg)"><Input type="number" step="0.1" placeholder="kg — optional" value={f.legYieldB} onChange={e => set("legYieldB", e.target.value)} /></Field>
+            </div>
+          </>}
+
+          <Divider />
           <Field label="Grain price (K/kg)"><Input type="number" step="0.1" placeholder="Current market price" value={f.price} onChange={e => set("price", e.target.value)} /></Field>
+
+          {f.legume && <Field label="Legume price (K/kg)"><Input type="number" step="0.1" placeholder="e.g. 12 — optional" value={f.legPrice} onChange={e => set("legPrice", e.target.value)} /></Field>}
 
           <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
             <Field label={`Plot A costs (K/${f.unit})`}><Input type="number" placeholder="0" value={f.costA} onChange={e => set("costA", e.target.value)} /></Field>
@@ -427,13 +567,21 @@ function ObsWizard({ groups, hosts, onSave, onCancel }) {
         const meetLabel = MEETINGS.find(m => m.id === f.meetingType)?.label || f.meetingType;
 
         const items = [
+          f.facilitatorName ? ["Facilitator", f.facilitatorName] : null,
           ["Date", f.date],
           ["Group", grp?.name],
           ["Host", host?.name],
           ["Meeting", meetLabel],
           ["Attendance", f.attendance],
+          f.location ? ["Location", f.location] : null,
           f.lat ? ["GPS", `${f.lat}, ${f.lng} (±${f.gpsAcc}m)`] : null,
           f.practice ? ["Practice", f.practice === "Other" ? f.practiceOther : f.practice] : null,
+          f.researchQuestion ? ["Research question", f.researchQuestion] : null,
+          f.variety ? ["Variety", f.variety] : null,
+          f.legume ? ["Legume", f.legume] : null,
+          f.plantingDate ? ["Planting date", f.plantingDate] : null,
+          f.plotADesc ? ["Plot A (control)", f.plotADesc.slice(0, 80) + (f.plotADesc.length > 80 ? "..." : "")] : null,
+          f.plotBDesc ? ["Plot B (treatment)", f.plotBDesc.slice(0, 80) + (f.plotBDesc.length > 80 ? "..." : "")] : null,
           f.sameSize ? ["Same size plots", f.sameSize] : null,
           f.oneVar ? ["One variable", f.oneVar] : null,
           f.visDiff ? ["Visible difference", f.visDiff] : null,
@@ -442,6 +590,8 @@ function ObsWizard({ groups, hosts, onSave, onCancel }) {
           f.hasSprayed ? ["Sprayed", `${f.sprayProduct} on ${f.sprayPlot}`] : null,
           f.weedPressure ? ["Weed pressure", f.weedPressure] : null,
           f.cropVigour ? ["Crop vigour", f.cropVigour] : null,
+          f.fieldwork ? ["Field work", f.fieldwork.slice(0, 80) + (f.fieldwork.length > 80 ? "..." : "")] : null,
+          f.cropCondition ? ["Crop condition", f.cropCondition.slice(0, 80) + (f.cropCondition.length > 80 ? "..." : "")] : null,
           f.groupSaw ? ["Group observed", f.groupSaw.slice(0, 80) + (f.groupSaw.length > 80 ? "..." : "")] : null,
           f.facSaw ? ["Facilitator observed", f.facSaw.slice(0, 80) + (f.facSaw.length > 80 ? "..." : "")] : null,
           f.problems ? ["Problems", f.problems.slice(0, 80)] : null,
@@ -567,19 +717,27 @@ function SetupScreen({ groups, hosts, onGroups, onHosts }) {
 export default function MundaTracker({ userProfile }) {
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [screen, setScreen] = useState("home"); // home, wizard, history, setup
+  const [screen, setScreen] = useState("home"); // home, wizard, history, setup, onboarding
   const [groups, setGroups] = useState([]);
   const [hosts, setHosts] = useState([]);
   const [obs, setObs] = useState([]);
   const [syncStatus, setSyncStatus] = useState("idle");
+  const [facilitator, setFacilitator] = useState(null); // { name, phone }
+  const [pendingCount, setPendingCount] = useState(0);
+
+  // Track pending sync queue
+  const updatePending = useCallback(() => {
+    try { const q = JSON.parse(localStorage.getItem('munda-sync-queue') || '[]'); setPendingCount(q.length); } catch { setPendingCount(0); }
+  }, []);
 
   useEffect(() => {
-    const c = ld(KEYS.consent), g = ld(KEYS.groups), h = ld(KEYS.hosts), o = ld(KEYS.obs);
-    if (c) setOk(true); if (g) setGroups(g); if (h) setHosts(h); if (o) setObs(o); setLoading(false);
+    const c = ld(KEYS.consent), g = ld(KEYS.groups), h = ld(KEYS.hosts), o = ld(KEYS.obs), f = ld(KEYS.facilitator);
+    if (c) setOk(true); if (g) setGroups(g); if (h) setHosts(h); if (o) setObs(o); if (f) setFacilitator(f); setLoading(false);
+    updatePending();
 
     if (navigator.onLine) {
       setSyncStatus("syncing");
-      processQueue().then(() => pullAll()).then(data => {
+      processQueue().then(() => { updatePending(); return pullAll(); }).then(data => {
         if (data.groups?.length) { const g = data.groups.map(g => ({ id: g.id, name: g.name, area: g.area || "" })); setGroups(g); sv(KEYS.groups, g); }
         if (data.hosts) { const h = data.hosts.map(h => ({ id: h.id, groupId: h.group_id, name: h.name, practice: h.practice || "", year: h.year || "2026" })); setHosts(h); sv(KEYS.hosts, h); }
         if (data.observations) { const o = data.observations.map(o => ({ id: o.id, date: o.date, groupId: o.group_id, hostId: o.host_id, meetingType: o.meeting_type, practice: o.practice, practiceOther: o.practice_other || "", attendance: o.attendance ? "" + o.attendance : "", lat: o.lat ? "" + o.lat : "", lng: o.lng ? "" + o.lng : "", gpsAcc: o.gps_acc ? "" + o.gps_acc : "", sameSize: o.same_size || "", oneVar: o.one_var || "", visDiff: o.vis_diff || "", groupSaw: o.group_saw || "", facSaw: o.fac_saw || "", problems: o.problems || "", yieldA: o.yield_a ? "" + o.yield_a : "", yieldB: o.yield_b ? "" + o.yield_b : "", price: o.price ? "" + o.price : "", costA: o.cost_a ? "" + o.cost_a : "", costB: o.cost_b ? "" + o.cost_b : "", savedAt: o.synced_at })); setObs(o); sv(KEYS.obs, o); }
@@ -594,10 +752,22 @@ export default function MundaTracker({ userProfile }) {
   const doSave = useCallback(entry => {
     setObs(prev => { const next = [...prev, entry]; sv(KEYS.obs, next); return next; });
     pushObservation(entry);
+    updatePending();
+    setScreen("home");
+  }, [updatePending]);
+  const doOnboarding = useCallback(({ name, phone, groups: newGroups }) => {
+    const fac = { name, phone };
+    setFacilitator(fac); sv(KEYS.facilitator, fac);
+    setGroups(newGroups); sv(KEYS.groups, newGroups);
+    newGroups.forEach(grp => pushGroup(grp));
     setScreen("home");
   }, []);
 
   if (loading) return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: T.font, color: T.textTer }}>Loading...</div>;
+
+  // Onboarding — show if no facilitator name set
+  const needsOnboarding = !facilitator?.name;
+  if (screen === "onboarding" || (needsOnboarding && screen === "home")) return <OnboardingWizard onComplete={doOnboarding} existingGroups={groups} />;
 
   // Wizard
   if (screen === "wizard") return <ObsWizard groups={groups} hosts={hosts} onSave={doSave} onCancel={() => setScreen("home")} />;
@@ -633,12 +803,13 @@ export default function MundaTracker({ userProfile }) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontWeight: 700, fontSize: 18, color: T.ochre }}>Munda</span>
-            {userProfile?.role === "admin" && <a href="/admin" style={{ fontSize: 10, color: T.textTer, textDecoration: "none", border: `1px solid rgba(255,255,255,0.15)`, borderRadius: 4, padding: "2px 8px" }}>Admin</a>}
+            <a href="/admin" style={{ fontSize: 12, fontWeight: 700, color: "#fff", textDecoration: "none", background: T.ochre, borderRadius: 6, padding: "5px 12px" }}>Admin</a>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: 0.5, color: syncStatus === "synced" ? "#7FBF7F" : syncStatus === "syncing" ? T.ochre : T.textTer }}>
-              {syncStatus === "syncing" ? "SYNCING..." : syncStatus === "synced" ? "✓ SYNCED" : "OFFLINE"}
+              {syncStatus === "syncing" ? "SYNCING..." : syncStatus === "synced" ? (pendingCount > 0 ? `${pendingCount} PENDING` : "SYNCED") : "OFFLINE"}
             </span>
+            {pendingCount > 0 && <span style={{ background: T.ochre, color: "#fff", fontSize: 10, fontWeight: 700, borderRadius: 10, padding: "1px 6px", minWidth: 16, textAlign: "center" }}>{pendingCount}</span>}
             <button onClick={signOut} style={{ background: "none", border: `1px solid rgba(255,255,255,0.12)`, borderRadius: 4, padding: "3px 8px", fontSize: 10, color: T.textTer, cursor: "pointer", fontFamily: T.font }}>Logout</button>
           </div>
         </div>
@@ -648,8 +819,8 @@ export default function MundaTracker({ userProfile }) {
       <div style={{ padding: 20, maxWidth: 480, margin: "0 auto" }}>
         {/* Welcome */}
         <div style={{ marginBottom: 28 }}>
-          <h1 style={{ fontSize: 24, fontWeight: 700, margin: "0 0 4px", letterSpacing: -0.5 }}>{userProfile?.full_name ? `Hi, ${userProfile.full_name.split(" ")[0]}` : "Welcome"}</h1>
-          <p style={{ fontSize: 14, color: T.textSec, margin: 0 }}>{obs.length} observation{obs.length !== 1 ? "s" : ""} recorded</p>
+          <h1 style={{ fontSize: 24, fontWeight: 700, margin: "0 0 4px", letterSpacing: -0.5 }}>Hi, {facilitator?.name?.split(" ")[0] || userProfile?.full_name?.split(" ")[0] || "there"}</h1>
+          <p style={{ fontSize: 14, color: T.textSec, margin: 0 }}>{obs.length} observation{obs.length !== 1 ? "s" : ""} recorded{pendingCount > 0 ? ` · ${pendingCount} pending sync` : ""}</p>
         </div>
 
         {/* Main action */}
@@ -678,6 +849,15 @@ export default function MundaTracker({ userProfile }) {
             </div>
           </button>
         </div>
+
+        {/* Contact Seb */}
+        <a href="https://wa.me/260977313318?text=Hi%20Seb%2C%20I%20need%20help%20with%20Munda%20FFS%20Tracker" target="_blank" rel="noopener" style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", background: T.surface, border: `1px solid ${T.border}`, borderRadius: T.radius, cursor: "pointer", fontFamily: T.font, textDecoration: "none", marginBottom: 28 }}>
+          <span style={{ fontSize: 20 }}>💬</span>
+          <div style={{ textAlign: "left" }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: T.text }}>Need help?</div>
+            <div style={{ fontSize: 12, color: T.textTer }}>Contact Seb on WhatsApp</div>
+          </div>
+        </a>
 
         {/* Recent */}
         {obs.length > 0 && <>

@@ -74,7 +74,7 @@ export default function Admin() {
   const [fDateTo, setFDateTo] = useState("");
 
   // View
-  const [view, setView] = useState("overview"); // overview, table, yields, quality
+  const [view, setView] = useState("overview"); // overview, table, yields, quality, facilitators, health
 
   async function loadData() {
     setLoading(true);
@@ -146,11 +146,11 @@ export default function Admin() {
 
   // CSV export
   function exportCSV() {
-    const headers = ["date", "group", "host", "meeting_type", "practice", "attendance", "lat", "lng", "same_size", "one_var", "vis_diff", "group_saw", "fac_saw", "problems", "yield_a_kg_ha", "yield_b_kg_ha", "price", "cost_a", "cost_b"];
+    const headers = ["date", "facilitator", "group", "host", "meeting_type", "practice", "attendance", "lat", "lng", "same_size", "one_var", "vis_diff", "group_saw", "fac_saw", "problems", "yield_a_kg_ha", "yield_b_kg_ha", "price", "cost_a", "cost_b"];
     const rows = filtered.map(o => {
       const grp = groups.find(g => g.id === o.group_id);
       const host = hosts.find(h => h.id === o.host_id);
-      return [o.date, grp?.name || "", host?.name || "", o.meeting_type, o.practice === "Other" ? o.practice_other : o.practice, o.attendance || "", o.lat || "", o.lng || "", o.same_size || "", o.one_var || "", o.vis_diff || "", `"${(o.group_saw || "").replace(/"/g, '""')}"`, `"${(o.fac_saw || "").replace(/"/g, '""')}"`, `"${(o.problems || "").replace(/"/g, '""')}"`, o.yield_a ? (parseFloat(o.yield_a) * 267).toFixed(0) : "", o.yield_b ? (parseFloat(o.yield_b) * 267).toFixed(0) : "", o.price || "", o.cost_a || "", o.cost_b || ""].join(",");
+      return [o.date, `"${(o.facilitator_name || "").replace(/"/g, '""')}"`, grp?.name || "", host?.name || "", o.meeting_type, o.practice === "Other" ? o.practice_other : o.practice, o.attendance || "", o.lat || "", o.lng || "", o.same_size || "", o.one_var || "", o.vis_diff || "", `"${(o.group_saw || "").replace(/"/g, '""')}"`, `"${(o.fac_saw || "").replace(/"/g, '""')}"`, `"${(o.problems || "").replace(/"/g, '""')}"`, o.yield_a ? (parseFloat(o.yield_a) * 267).toFixed(0) : "", o.yield_b ? (parseFloat(o.yield_b) * 267).toFixed(0) : "", o.price || "", o.cost_a || "", o.cost_b || ""].join(",");
     });
     const csv = [headers.join(","), ...rows].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
@@ -226,7 +226,7 @@ export default function Admin() {
 
         {/* View tabs */}
         <div style={{ display: "flex", gap: 0, marginBottom: 20, borderRadius: 6, overflow: "hidden" }}>
-          {[["overview", "Overview"], ["table", "All Data"], ["yields", "Yield Analysis"], ["quality", "Methodology"]].map(([id, label]) => (
+          {[["overview", "Overview"], ["health", "Group Health"], ["facilitators", "Facilitators"], ["table", "All Data"], ["yields", "Yield Analysis"], ["quality", "Methodology"]].map(([id, label]) => (
             <button key={id} onClick={() => setView(id)} style={{ flex: 1, padding: "10px 0", border: "none", cursor: "pointer", background: view === id ? C.ochre : C.white, color: view === id ? "#fff" : C.mid, fontSize: 13, fontWeight: 700, fontFamily: font, borderBottom: view !== id ? "2px solid " + C.warmDark : "none" }}>{label}</button>
           ))}
         </div>
@@ -279,7 +279,7 @@ export default function Admin() {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr>
-                  {["Date", "Group", "Host", "Type", "Practice", "Att.", "Size", "1 Var", "Diff", "GPS", "A kg/ha", "B kg/ha", "%"].map(h => (
+                  {["Date", "Facilitator", "Group", "Host", "Type", "Practice", "Att.", "Size", "1 Var", "Diff", "GPS", "A kg/ha", "B kg/ha", "%"].map(h => (
                     <th key={h} style={thStyle}>{h}</th>
                   ))}
                 </tr>
@@ -293,6 +293,7 @@ export default function Admin() {
                   return (
                     <tr key={o.id} style={{ background: C.white }}>
                       <td style={tdStyle}>{o.date}</td>
+                      <td style={{ ...tdStyle, fontSize: 12, color: C.mid }}>{o.facilitator_name || "—"}</td>
                       <td style={{ ...tdStyle, color: C.ochre, fontWeight: 600 }}>{grp?.name || "?"}</td>
                       <td style={tdStyle}>{host?.name || ""}</td>
                       <td style={tdStyle}>{o.meeting_type}</td>
@@ -464,6 +465,153 @@ export default function Admin() {
             })()}
           </div>
         )}
+        {/* ═══ FACILITATORS ═══ */}
+        {view === "facilitators" && (() => {
+          const byFac = {};
+          obs.forEach(o => {
+            const name = o.facilitator_name || o.device_id || "Unknown";
+            if (!byFac[name]) byFac[name] = { obs: [], groups: new Set(), lastDate: "", issues: 0 };
+            byFac[name].obs.push(o);
+            if (o.group_id) byFac[name].groups.add(o.group_id);
+            if (!byFac[name].lastDate || o.date > byFac[name].lastDate) byFac[name].lastDate = o.date;
+            if (o.same_size === "No" || (o.one_var && o.one_var.startsWith("No"))) byFac[name].issues++;
+          });
+
+          const today = new Date().toISOString().slice(0, 10);
+          const daysSince = (d) => { if (!d) return 999; return Math.floor((new Date(today) - new Date(d)) / 86400000); };
+
+          const facList = Object.entries(byFac).sort((a, b) => b[1].obs.length - a[1].obs.length);
+
+          return (
+            <div style={card}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: C.ochre, letterSpacing: 1, marginBottom: 16, textTransform: "uppercase" }}>
+                Facilitator Submissions ({facList.length} facilitators)
+              </div>
+              {facList.map(([name, d]) => {
+                const days = daysSince(d.lastDate);
+                const inactive = days > 30;
+                const errorRate = d.obs.length > 0 ? Math.round((d.issues / d.obs.length) * 100) : 0;
+                return (
+                  <div key={name} style={{ padding: "14px 0", borderBottom: "1px solid " + C.warmDark }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                      <div>
+                        <span style={{ fontWeight: 700, fontSize: 15 }}>{name}</span>
+                        <span style={{ fontSize: 12, color: C.mid, marginLeft: 10 }}>{d.groups.size} group{d.groups.size !== 1 ? "s" : ""}</span>
+                      </div>
+                      {inactive && <Badge text={"Inactive " + days + "d"} ok={false} />}
+                    </div>
+                    <div style={{ display: "flex", gap: 16, fontSize: 13, color: C.mid }}>
+                      <span><strong style={{ color: C.char }}>{d.obs.length}</strong> observations</span>
+                      <span>Last: <strong style={{ color: inactive ? C.alert : C.char }}>{d.lastDate || "never"}</strong></span>
+                      {errorRate > 0 && <span>Errors: <strong style={{ color: errorRate > 20 ? C.alert : C.mid }}>{errorRate}%</strong></span>}
+                    </div>
+                  </div>
+                );
+              })}
+              {facList.length === 0 && <div style={{ textAlign: "center", color: C.mid, padding: 40 }}>No facilitator data yet. Facilitators need to set up their name in the app.</div>}
+            </div>
+          );
+        })()}
+
+        {/* ═══ GROUP HEALTH ═══ */}
+        {view === "health" && (() => {
+          const today = new Date().toISOString().slice(0, 10);
+          const daysSince = (d) => { if (!d) return 999; return Math.floor((new Date(today) - new Date(d)) / 86400000); };
+
+          const groupHealth = groups.map(g => {
+            const gObs = obs.filter(o => o.group_id === g.id);
+            const gHosts = hosts.filter(h => h.group_id === g.id);
+            const lastDate = gObs.length > 0 ? gObs.reduce((max, o) => o.date > max ? o.date : max, "") : "";
+            const days = daysSince(lastDate);
+            const issues = gObs.filter(o => o.same_size === "No" || (o.one_var && o.one_var.startsWith("No"))).length;
+            const errorRate = gObs.length > 0 ? Math.round((issues / gObs.length) * 100) : 0;
+            const totalAttendance = gObs.reduce((s, o) => s + (o.attendance || 0), 0);
+            const avgAttendance = gObs.length > 0 ? Math.round(totalAttendance / gObs.length) : 0;
+            const withYield = gObs.filter(o => o.yield_a > 0 && o.yield_b > 0);
+            const facilitators = [...new Set(gObs.map(o => o.facilitator_name || o.device_id).filter(Boolean))];
+
+            // Compute risk score: higher = more attention needed
+            let risk = 0;
+            if (days > 60) risk += 3;
+            else if (days > 30) risk += 2;
+            else if (days > 14) risk += 1;
+            if (gObs.length === 0) risk += 3;
+            if (errorRate > 30) risk += 2;
+            else if (errorRate > 15) risk += 1;
+            if (gHosts.length === 0) risk += 2;
+
+            return { ...g, obs: gObs.length, hosts: gHosts.length, lastDate, days, issues, errorRate, avgAttendance, withYield: withYield.length, facilitators, risk };
+          }).sort((a, b) => b.risk - a.risk);
+
+          const riskColor = (r) => r >= 4 ? C.alert : r >= 2 ? C.ochre : C.green;
+          const riskLabel = (r) => r >= 4 ? "Needs attention" : r >= 2 ? "Watch" : "On track";
+
+          return (
+            <div>
+              <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
+                <div style={{ ...statBox, background: C.alertPale }}>
+                  <div style={{ ...statNum, color: C.alert }}>{groupHealth.filter(g => g.risk >= 4).length}</div>
+                  <div style={statLabel}>Need Attention</div>
+                </div>
+                <div style={{ ...statBox, background: C.ochrePale }}>
+                  <div style={{ ...statNum, color: C.ochre }}>{groupHealth.filter(g => g.risk >= 2 && g.risk < 4).length}</div>
+                  <div style={statLabel}>Watch</div>
+                </div>
+                <div style={{ ...statBox, background: C.greenPale }}>
+                  <div style={{ ...statNum, color: C.green }}>{groupHealth.filter(g => g.risk < 2).length}</div>
+                  <div style={statLabel}>On Track</div>
+                </div>
+              </div>
+
+              {groupHealth.map(g => (
+                <div key={g.id} style={{ ...card, borderLeft: `4px solid ${riskColor(g.risk)}` }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                    <div>
+                      <span style={{ fontWeight: 700, fontSize: 16 }}>{g.name}</span>
+                      {g.area && <span style={{ fontSize: 13, color: C.mid, marginLeft: 10 }}>{g.area}</span>}
+                    </div>
+                    <Badge text={riskLabel(g.risk)} ok={g.risk < 2 ? true : g.risk < 4 ? null : false} />
+                  </div>
+
+                  <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 13, marginBottom: 8 }}>
+                    <div><span style={{ color: C.mid }}>Observations:</span> <strong>{g.obs}</strong></div>
+                    <div><span style={{ color: C.mid }}>Host farmers:</span> <strong>{g.hosts}</strong></div>
+                    <div><span style={{ color: C.mid }}>Avg attendance:</span> <strong>{g.avgAttendance}</strong></div>
+                    <div><span style={{ color: C.mid }}>Yields recorded:</span> <strong>{g.withYield}</strong></div>
+                  </div>
+
+                  <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 13, marginBottom: 8 }}>
+                    <div>
+                      <span style={{ color: C.mid }}>Last submission:</span>{" "}
+                      <strong style={{ color: g.days > 30 ? C.alert : C.char }}>{g.lastDate || "never"}</strong>
+                      {g.days > 14 && g.lastDate && <span style={{ color: C.alert, fontSize: 12 }}> ({g.days}d ago)</span>}
+                    </div>
+                    <div>
+                      <span style={{ color: C.mid }}>Error rate:</span>{" "}
+                      <strong style={{ color: g.errorRate > 20 ? C.alert : C.char }}>{g.errorRate}%</strong>
+                    </div>
+                  </div>
+
+                  {g.facilitators.length > 0 && (
+                    <div style={{ fontSize: 12, color: C.mid }}>
+                      Facilitators: {g.facilitators.join(", ")}
+                    </div>
+                  )}
+
+                  {/* Flags */}
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
+                    {g.obs === 0 && <Badge text="No data" ok={false} />}
+                    {g.hosts === 0 && <Badge text="No host farmers" ok={false} />}
+                    {g.days > 30 && g.lastDate && <Badge text="Inactive >30d" ok={false} />}
+                    {g.errorRate > 20 && <Badge text="High error rate" ok={false} />}
+                    {g.obs > 0 && g.withYield === 0 && <Badge text="No yield data" ok={null} />}
+                    {g.risk < 2 && g.obs > 0 && <Badge text="Good" ok={true} />}
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
       </div>
     </div>
   );

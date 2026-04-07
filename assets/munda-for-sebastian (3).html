@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Munda — For Seb</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Source Sans 3', -apple-system, system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  color: #2C2C2C;
+  background: #F5F0E8;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  background: #F5F0E8;
+  min-height: 100vh;
+}
+
+.opening {
+  padding: 48px 24px 32px;
+}
+
+.brand {
+  font-size: 13px;
+  color: #B8622D;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #2C2C2C;
+  margin-bottom: 16px;
+}
+
+.intro-note {
+  font-size: 15px;
+  color: #7A746B;
+  line-height: 1.6;
+}
+
+.body { padding: 0 24px; }
+
+p {
+  font-size: 16px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+p strong { color: #2C2C2C; }
+.ochre { color: #B8622D; }
+
+.divider {
+  height: 1px;
+  background: #E8E1D5;
+  margin: 8px 0 40px;
+}
+
+em { font-style: italic; color: #7A746B; }
+
+.quiet {
+  color: #7A746B;
+  font-style: italic;
+}
+
+/* ── QUESTIONS ── */
+.question {
+  margin: 32px 0;
+  border-left: 3px solid #B8622D;
+  padding-left: 20px;
+  transition: border-color 0.3s;
+}
+
+.question.answered {
+  border-left-color: #2D5A27;
+}
+
+.q-text {
+  font-size: 17px;
+  font-weight: 600;
+  color: #2C2C2C;
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+
+.q-sub {
+  font-size: 14px;
+  color: #7A746B;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.q-input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #E8E1D5;
+  background: transparent;
+  padding: 8px 0;
+  font-size: 16px;
+  font-family: inherit;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  color: #2C2C2C;
+  transition: border-color 0.2s;
+}
+
+.q-input:focus {
+  border-bottom-color: #B8622D;
+}
+
+.q-check {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #2D5A27;
+  font-weight: 600;
+  display: none;
+}
+
+.question.answered .q-check {
+  display: block;
+}
+
+/* ── SEND SECTION ── */
+.send-section {
+  padding: 16px 0 48px;
+}
+
+.send-count {
+  font-size: 14px;
+  color: #7A746B;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  margin-bottom: 10px;
+  text-align: center;
+  text-decoration: none;
+  -webkit-appearance: none;
+}
+
+.btn-wa { background: #25D366; color: white; }
+.btn-copy { background: #B8622D; color: white; }
+.btn-dark { background: #2C2C2C; color: white; }
+
+.btn:active { opacity: 0.85; }
+
+.sent-msg {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 15px;
+  color: #2D5A27;
+  font-weight: 600;
+  display: none;
+}
+
+.footer {
+  padding: 16px 24px;
+  text-align: center;
+  font-size: 12px;
+  color: #7A746B;
+  line-height: 1.5;
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="opening">
+    <div class="brand">MUNDA</div>
+    <h1>Your field school.<br>Your knowledge.<br>Further than one farm can reach.</h1>
+    <p class="intro-note">Read through. Answer where it makes sense. Copy or send when you're ready.</p>
+  </div>
+
+  <div class="body">
+
+    <p>Seb, everything at Kafue works. The yields are verified. The communities at Mpanshya speak for themselves. Twenty years of proof.</p>
+
+    <p>The thing that doesn't work yet is getting it out of your head and into a thousand fields at once.</p>
+
+    <p>Working with a few farmer groups a year — that's maybe 100 people. Zambia has over a million farming households. You already know this. You've been asking the same question: <em>how to spread it.</em></p>
+
+    <p>Here's what we think the answer looks like. Tell us where we're wrong.</p>
+
+    <div class="divider"></div>
+
+    <p><strong>You stop working with farmer groups.</strong></p>
+
+    <p>Not because that work doesn't matter — it does. But because every hour you spend with one group of 25 is an hour you're not training someone who could reach 25 groups.</p>
+
+    <p>You train trainers. They train facilitators. The facilitators run the field schools. You've said the practices are simple enough that anyone can do it and replicate it. So the job isn't teaching farmers — it's <strong>teaching the people who'll teach the people who work with farmers.</strong></p>
+
+    <p>One workshop from you reaches 25 trainers. Each trainer reaches 30 facilitators. Each facilitator runs a group of 25 farmers. That's nearly 19,000 farmers from a single workshop.</p>
+
+    <p>Run three workshops a year, and you're in every province.</p>
+
+    <div class="divider"></div>
+
+    <p><strong>This doesn't mean you sit at home.</strong></p>
+
+    <p>You run the workshops. As many as you want — the more you run, the further it reaches. You're the one standing in front of the room because nobody else has your twenty years on the soil.</p>
+
+    <p>You travel to where facilitators are working. You walk their plots, watch how they're running sessions, see where the message is holding and where it's drifting. You're the quality eye. When you see something going wrong, you fix it — not by writing a memo, but by standing in a field and showing them.</p>
+
+    <p>You keep learning. Your farm is still the lab. Intercropping keeps evolving, you said. New combinations, new failures, new insights every season. That learning feeds back into everything — the training, the tool, the whole system.</p>
+
+    <p>You're the face and the voice. When a district agricultural coordinator asks "who's behind this?" — your name is the answer. Your results. Your farm.</p>
+
+    <p class="quiet">The only thing that changes: you're not the bottleneck anymore. Not because you step back — because there are a thousand people carrying what you taught them into fields you'll never visit. And they're doing it right because the method corrects itself and the tool holds your thinking.</p>
+
+    <div class="divider"></div>
+
+    <p><strong>Not the FAO field school.</strong></p>
+
+    <p>You said their model takes too much time. Season-long weekly meetings. Facilitator training that takes a whole season before you even start. Too heavy to cascade fast.</p>
+
+    <p>Your version is lighter because the practices are simpler. A comparison plot corrects mistakes the facilitator makes — the field teaches, not the person. That's what makes it replicable by anyone.</p>
+
+    <p>But we need you to define what "your version" actually looks like in a repeatable format.</p>
+
+    <!-- Q1 -->
+    <div class="question" id="q-ffs">
+      <div class="q-text">What does your field school actually look like?</div>
+      <div class="q-sub">Not FAO's version. Yours. How many times does the group meet? What happens at each one? What's the bare minimum that works?</div>
+      <textarea class="q-input" data-id="your_ffs" rows="2" placeholder="Type or voice-to-text..." oninput="checkAnswered(this)"></textarea>
+      <div class="q-check">✓ Noted</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <p><strong>The digital tool.</strong></p>
+
+    <p>You wondered whether AI could put this information into a reasonable format. It can. We've built a phone-based tool — Munda — that holds your principles, your failure modes, your "it depends on the context" thinking.</p>
+
+    <p>A facilitator in Pemba types: <em>"Sandy soil, no cattle, Striga in the maize."</em> The tool responds the way you would — not with a recipe, but with principles, trade-offs, and "try this small and see." It doesn't replace you. It makes your way of thinking available to every facilitator at 2am when you're asleep.</p>
+
+    <p>The practices keep evolving. That's why this is an app, not a book. You review it each season, update what's changed, and the tool evolves with you.</p>
+
+    <!-- Q2 -->
+    <div class="question" id="q-evolved">
+      <div class="q-text">What's changed in the last five years?</div>
+      <div class="q-sub">You said intercropping keeps evolving. What did you stop doing? What did you start? What surprised you?</div>
+      <textarea class="q-input" data-id="evolved" rows="2" placeholder="Type or voice-to-text..." oninput="checkAnswered(this)"></textarea>
+      <div class="q-check">✓ Noted</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <p><strong>The people in the middle.</strong></p>
+
+    <p>Facilitators are where this lives or dies. Extension officers, lead farmers, community agents — the people who actually sit with a farmer group and run the process. They don't need to know everything you know. They need to know enough to set up a comparison plot, ask good questions, and not lecture.</p>
+
+    <p>You've seen people pick this up naturally. You've also seen people who couldn't. What's the difference?</p>
+
+    <!-- Q3 -->
+    <div class="question" id="q-facilitator">
+      <div class="q-text">What does a facilitator need to know — at minimum?</div>
+      <div class="q-sub">What did the good ones get right naturally? Where did they need you?</div>
+      <textarea class="q-input" data-id="facilitator" rows="2" placeholder="Type or voice-to-text..." oninput="checkAnswered(this)"></textarea>
+      <div class="q-check">✓ Noted</div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question" id="q-first">
+      <div class="q-text">If someone's starting their first group tomorrow — what practice do they test?</div>
+      <div class="q-sub">Most forgiving, most visible results, hardest to mess up badly.</div>
+      <textarea class="q-input" data-id="first_practice" rows="2" placeholder="Type or voice-to-text..." oninput="checkAnswered(this)"></textarea>
+      <div class="q-check">✓ Noted</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <p><strong>Regulation.</strong></p>
+
+    <p>You mentioned this and we need to understand what you mean. It could change the whole approach.</p>
+
+    <!-- Q5 -->
+    <div class="question" id="q-reg">
+      <div class="q-text">You mentioned regulation — what did you mean?</div>
+      <div class="q-sub">Seed rules? Extension policy? Market access? Organic standards? Something else?</div>
+      <textarea class="q-input" data-id="regulation" rows="2" placeholder="Type or voice-to-text..." oninput="checkAnswered(this)"></textarea>
+      <div class="q-check">✓ Noted</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <p><strong>One video.</strong></p>
+
+    <p>You said short videos could work, but only if well made. One to start. You on your farm. 3–5 minutes. Walking through what a lightweight field school looks like in practice — not explaining, showing.</p>
+
+    <p>It doesn't need to be polished. It needs to be you. An extension officer watches it and thinks <em>I could do that tomorrow.</em></p>
+
+    <div class="divider"></div>
+
+    <p><strong>Who does what.</strong></p>
+
+    <p><strong class="ochre">You and Grassroots Trust:</strong> the knowledge, the method, the credibility. The workshops. The field visits. The video. The evolving source of what's true on the ground.</p>
+
+    <p><strong class="ochre">ZamAi:</strong> the digital tool. The programme design. The cascade structure. Connecting this to CATSP and the policy framework. Everything that makes your knowledge travel without depending on you being physically present.</p>
+
+    <p>CATSP is phasing out FISP. The government needs a new extension model. They don't have one. This could be it — not because we pitch it, but because it's the only approach that works without subsidised inputs. That's our job to position. Not yours.</p>
+
+    <div class="divider"></div>
+
+    <p><strong>Two more questions.</strong> The harder ones.</p>
+
+    <!-- Q6 -->
+    <div class="question" id="q-worry">
+      <div class="q-text">What worries you about scaling this?</div>
+      <div class="q-sub">The thing that keeps you up. The way it could go wrong. The reason you haven't done it already.</div>
+      <textarea class="q-input" data-id="worry" rows="2" placeholder="Type or voice-to-text..." oninput="checkAnswered(this)"></textarea>
+      <div class="q-check">✓ Noted</div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question" id="q-dream">
+      <div class="q-text">If this worked — really worked — what does it look like in five years?</div>
+      <div class="q-sub">Not the programme. The fields. The farmers. The soil. What do you see?</div>
+      <textarea class="q-input" data-id="dream" rows="2" placeholder="Type or voice-to-text..." oninput="checkAnswered(this)"></textarea>
+      <div class="q-check">✓ Noted</div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question" id="q-any">
+      <div class="q-text">What haven't we asked?</div>
+      <div class="q-sub">Whatever's on your mind.</div>
+      <textarea class="q-input" data-id="anything" rows="2" placeholder="Type or voice-to-text..." oninput="checkAnswered(this)"></textarea>
+      <div class="q-check">✓ Noted</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <p>Twenty years proving it works. Now lead it further than one farm can reach.</p>
+
+    <!-- SEND -->
+    <div class="send-section">
+      <div class="send-count" id="sendCount">Answer what you can. Send when ready.</div>
+
+      <button class="btn btn-wa" onclick="sendWhatsApp()">Send via WhatsApp</button>
+      <button class="btn btn-copy" onclick="copyAll()">Copy all answers</button>
+
+      <div class="sent-msg" id="sentMsg">✓ Copied. Paste it into a WhatsApp message or wherever works.</div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Munda · Grassroots Trust + ZamAi · April 2026<br>
+    Draft for conversation
+  </div>
+
+</div>
+
+<script>
+function getAnswers() {
+  const fields = document.querySelectorAll('.q-input');
+  const answers = [];
+  let count = 0;
+  fields.forEach(f => {
+    const id = f.dataset.id;
+    const val = f.value.trim();
+    const label = f.closest('.question').querySelector('.q-text').textContent;
+    answers.push({ id, label, val });
+    if (val) count++;
+  });
+  return { answers, count, total: fields.length };
+}
+
+function checkAnswered(el) {
+  const q = el.closest('.question');
+  if (el.value.trim()) {
+    q.classList.add('answered');
+    el.rows = 5;
+  } else {
+    q.classList.remove('answered');
+    el.rows = 2;
+  }
+  updateCount();
+}
+
+function updateCount() {
+  const { count, total } = getAnswers();
+  const el = document.getElementById('sendCount');
+  if (count > 0) {
+    el.textContent = count + ' of ' + total + ' answered';
+  } else {
+    el.textContent = 'Answer what you can. Send when ready.';
+  }
+}
+
+function compileText() {
+  const { answers } = getAnswers();
+  let text = '🌱 Munda — Seb\'s answers\n\n';
+  answers.forEach(a => {
+    text += '▸ ' + a.label + '\n';
+    text += (a.val || '(not yet)') + '\n\n';
+  });
+  text += '— sent ' + new Date().toLocaleDateString();
+  return text;
+}
+
+function sendWhatsApp() {
+  const text = encodeURIComponent(compileText());
+  window.open('https://wa.me/?text=' + text, '_blank');
+  showSent();
+}
+
+function copyAll() {
+  const text = compileText();
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(showSent);
+  } else {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showSent();
+  }
+}
+
+function showSent() {
+  const el = document.getElementById('sentMsg');
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+// Auto-expand textareas on focus
+document.querySelectorAll('.q-input').forEach(el => {
+  el.addEventListener('focus', function() {
+    if (!this.value.trim()) this.rows = 5;
+  });
+  el.addEventListener('blur', function() {
+    if (!this.value.trim()) this.rows = 2;
+  });
+});
+</script>
+
+</body>
+</html>

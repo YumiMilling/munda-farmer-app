@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Munda · FFS Observation</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Source Sans 3', -apple-system, system-ui, sans-serif; font-size: 17px; line-height: 1.6; color: #2C2C2C; background: #F5F0E8; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 460px; margin: 0 auto; background: #FEFDFB; min-height: 100vh; }
+
+.header { background: #2C2C2C; padding: 16px 20px; }
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.brand { font-weight: 700; font-size: 15px; color: #B8622D; letter-spacing: 0.5px; }
+.tag { font-size: 11px; color: #7A746B; letter-spacing: 1px; }
+.header h1 { font-size: 20px; font-weight: 700; color: #FEFDFB; line-height: 1.2; }
+.header p { font-size: 13px; color: #A09A92; margin-top: 6px; line-height: 1.5; }
+
+.form { padding: 20px; }
+
+.field { margin-bottom: 20px; }
+.field-label { font-size: 12px; font-weight: 700; color: #7A746B; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.field-hint { font-size: 13px; color: #A09A92; margin-bottom: 8px; line-height: 1.4; }
+
+.field select, .field input, .field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #E8E1D5;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: inherit;
+  background: #FEFDFB;
+  color: #2C2C2C;
+  outline: none;
+  box-sizing: border-box;
+}
+.field select { appearance: auto; }
+.field textarea { resize: vertical; line-height: 1.6; }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: #B8622D; }
+
+.yn-row { display: flex; gap: 8px; }
+.yn-btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #E8E1D5;
+  border-radius: 6px;
+  background: #FEFDFB;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: center;
+  color: #7A746B;
+}
+.yn-btn.selected { border-color: #B8622D; background: #F0DCC8; color: #B8622D; }
+
+.divider { height: 1px; background: #E8E1D5; margin: 24px 0; }
+
+.btn {
+  display: block; width: 100%; padding: 14px; border: none; border-radius: 8px;
+  font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer;
+  margin-bottom: 10px; text-align: center; -webkit-appearance: none;
+}
+.btn-wa { background: #25D366; color: white; }
+.btn-copy { background: #B8622D; color: white; }
+.btn:active { opacity: 0.85; }
+
+.sent-msg { text-align: center; font-size: 15px; color: #2D5A27; font-weight: 600; display: none; margin-top: 12px; }
+
+.footer { padding: 12px 20px; background: #F5F0E8; font-size: 11px; color: #7A746B; text-align: center; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="header">
+  <div class="header-top">
+    <span class="brand">Munda</span>
+    <span class="tag">FFS OBSERVATION</span>
+  </div>
+  <h1>Post-meeting report</h1>
+  <p>Fill this in after each FFS meeting. Takes 2 minutes. Send to Seb when done.</p>
+</div>
+
+<div class="form">
+
+  <!-- Meeting type -->
+  <div class="field">
+    <div class="field-label">Meeting type</div>
+    <div class="yn-row">
+      <button class="yn-btn" data-field="meeting" data-val="Pre-season planning" onclick="ynSelect(this)">Pre-season</button>
+      <button class="yn-btn" data-field="meeting" data-val="Mid-season observation" onclick="ynSelect(this)">Mid-season</button>
+      <button class="yn-btn" data-field="meeting" data-val="Post-harvest review" onclick="ynSelect(this)">Post-harvest</button>
+    </div>
+  </div>
+
+  <!-- Group -->
+  <div class="field">
+    <div class="field-label">Group</div>
+    <select id="f-group">
+      <option value="">Select group...</option>
+      <script>
+        for (var i = 1; i <= 13; i++) {
+          document.write('<option value="Group ' + i + '">Group ' + i + '</option>');
+        }
+      </script>
+    </select>
+  </div>
+
+  <!-- Host -->
+  <div class="field">
+    <div class="field-label">Host farmer</div>
+    <input id="f-host" type="text" placeholder="Name">
+  </div>
+
+  <!-- Practice -->
+  <div class="field">
+    <div class="field-label">What is being tested?</div>
+    <input id="f-practice" type="text" placeholder='e.g. "With vs without covered manure"'>
+  </div>
+
+  <!-- Attendance -->
+  <div class="field">
+    <div class="field-label">How many people attended?</div>
+    <input id="f-attendance" type="number" placeholder="Number">
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Plot comparison questions — neutral -->
+  <div class="field">
+    <div class="field-label">Are the two plots the same size?</div>
+    <div class="yn-row">
+      <button class="yn-btn" data-field="samesize" data-val="Yes, same size" onclick="ynSelect(this)">Yes</button>
+      <button class="yn-btn" data-field="samesize" data-val="No, different sizes" onclick="ynSelect(this)">No</button>
+      <button class="yn-btn" data-field="samesize" data-val="Not sure" onclick="ynSelect(this)">Not sure</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Apart from the one thing being tested — is everything else the same?</div>
+    <div class="field-hint">Same seed, same spacing, same planting date, same treatment.</div>
+    <div class="yn-row">
+      <button class="yn-btn" data-field="onevariable" data-val="Yes, only one difference" onclick="ynSelect(this)">Yes</button>
+      <button class="yn-btn" data-field="onevariable" data-val="No, other things also different" onclick="ynSelect(this)">No</button>
+      <button class="yn-btn" data-field="onevariable" data-val="Not sure" onclick="ynSelect(this)">Not sure</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Can you see a difference between the two plots?</div>
+    <div class="yn-row">
+      <button class="yn-btn" data-field="visible" data-val="Clear difference" onclick="ynSelect(this)">Clear</button>
+      <button class="yn-btn" data-field="visible" data-val="Some difference" onclick="ynSelect(this)">Some</button>
+      <button class="yn-btn" data-field="visible" data-val="No visible difference" onclick="ynSelect(this)">None</button>
+      <button class="yn-btn" data-field="visible" data-val="Too early to tell" onclick="ynSelect(this)">Too early</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Yields (post-harvest only) -->
+  <div class="field">
+    <div class="field-label">Yields (if harvested)</div>
+    <div class="field-hint">Leave blank if not yet harvested.</div>
+    <div style="display: flex; gap: 10px;">
+      <div style="flex: 1;">
+        <input id="f-yieldA" type="text" placeholder="Plot A">
+      </div>
+      <div style="flex: 1;">
+        <input id="f-yieldB" type="text" placeholder="Plot B">
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Open observations -->
+  <div class="field">
+    <div class="field-label">What did the group notice?</div>
+    <div class="field-hint">In their words. What did they say when they looked at the plots?</div>
+    <textarea id="f-groupnoticed" rows="3" placeholder="What the farmers said..."></textarea>
+  </div>
+
+  <div class="field">
+    <div class="field-label">What did you notice?</div>
+    <div class="field-hint">Anything the group didn't mention. Anything that surprised you.</div>
+    <textarea id="f-younoticed" rows="3" placeholder="Your own observation..."></textarea>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Any problems?</div>
+    <div class="field-hint">Livestock got in, drought, pests, anything that affected the plots.</div>
+    <textarea id="f-problems" rows="2" placeholder="Or leave blank if none"></textarea>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Send -->
+  <button class="btn btn-wa" onclick="sendWA()">Send to Seb via WhatsApp</button>
+  <button class="btn btn-copy" onclick="copyAll()">Copy report</button>
+  <div class="sent-msg" id="sentMsg">✓ Copied. Paste into WhatsApp.</div>
+
+</div>
+
+<div class="footer">
+  Munda · Grassroots Trust · 2026
+</div>
+
+</div>
+
+<script>
+var ynValues = {};
+
+function ynSelect(btn) {
+  var field = btn.dataset.field;
+  var val = btn.dataset.val;
+  ynValues[field] = val;
+  var btns = btn.parentElement.querySelectorAll('.yn-btn');
+  btns.forEach(function(b) { b.classList.remove('selected'); });
+  btn.classList.add('selected');
+}
+
+function val(id) { return document.getElementById(id).value.trim(); }
+
+function compile() {
+  var t = '🌱 Munda FFS Observation\n\n';
+  
+  if (ynValues.meeting) t += '📅 ' + ynValues.meeting + '\n';
+  if (val('f-group')) t += '👥 ' + val('f-group') + '\n';
+  if (val('f-host')) t += '🏠 Host: ' + val('f-host') + '\n';
+  if (val('f-practice')) t += '🔬 Testing: ' + val('f-practice') + '\n';
+  if (val('f-attendance')) t += '👤 Attendance: ' + val('f-attendance') + '\n';
+  
+  t += '\n';
+  
+  if (ynValues.samesize) t += 'Plots same size: ' + ynValues.samesize + '\n';
+  if (ynValues.onevariable) t += 'Only one variable: ' + ynValues.onevariable + '\n';
+  if (ynValues.visible) t += 'Visible difference: ' + ynValues.visible + '\n';
+  
+  if (val('f-yieldA') || val('f-yieldB')) {
+    t += '\nYields: Plot A = ' + (val('f-yieldA') || '?') + ' | Plot B = ' + (val('f-yieldB') || '?') + '\n';
+  }
+  
+  if (val('f-groupnoticed')) t += '\nGroup noticed:\n' + val('f-groupnoticed') + '\n';
+  if (val('f-younoticed')) t += '\nFacilitator noticed:\n' + val('f-younoticed') + '\n';
+  if (val('f-problems')) t += '\nProblems:\n' + val('f-problems') + '\n';
+  
+  t += '\n— sent ' + new Date().toLocaleDateString();
+  return t;
+}
+
+function sendWA() {
+  window.open('https://wa.me/?text=' + encodeURIComponent(compile()), '_blank');
+  showSent();
+}
+
+function copyAll() {
+  var text = compile();
+  if (navigator.clipboard) { navigator.clipboard.writeText(text).then(showSent); }
+  else { var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showSent(); }
+}
+
+function showSent() {
+  var el = document.getElementById('sentMsg');
+  el.style.display = 'block';
+  setTimeout(function() { el.style.display = 'none'; }, 4000);
+}
+</script>
+</body>
+</html>

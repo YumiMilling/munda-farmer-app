@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Munda · FFS Observation</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Source Sans 3', -apple-system, system-ui, sans-serif; font-size: 17px; line-height: 1.6; color: #2C2C2C; background: #F5F0E8; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 460px; margin: 0 auto; background: #FEFDFB; min-height: 100vh; }
+
+.header { background: #2C2C2C; padding: 16px 20px; }
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.brand { font-weight: 700; font-size: 15px; color: #B8622D; letter-spacing: 0.5px; }
+.tag { font-size: 11px; color: #7A746B; letter-spacing: 1px; }
+.header h1 { font-size: 20px; font-weight: 700; color: #FEFDFB; line-height: 1.2; }
+.header p { font-size: 13px; color: #A09A92; margin-top: 6px; line-height: 1.5; }
+
+.form { padding: 20px; }
+
+/* ── CONSENT OVERLAY ── */
+.consent-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(44,44,44,0.95); z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.consent-box {
+  background: #FEFDFB; border-radius: 12px; padding: 28px 24px;
+  max-width: 400px; width: 100%;
+}
+.consent-box h2 { font-size: 19px; font-weight: 700; margin-bottom: 12px; color: #2C2C2C; }
+.consent-box p { font-size: 14px; line-height: 1.6; color: #5A5A5A; margin-bottom: 16px; }
+.consent-box label { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.5; color: #2C2C2C; cursor: pointer; margin-bottom: 16px; }
+.consent-box input[type=checkbox] { margin-top: 3px; width: 18px; height: 18px; flex-shrink: 0; accent-color: #B8622D; }
+.consent-btn {
+  width: 100%; padding: 14px; background: #B8622D; color: white;
+  border: none; border-radius: 8px; font-size: 15px; font-weight: 700;
+  font-family: inherit; cursor: pointer;
+}
+.consent-btn:disabled { background: #E8E1D5; cursor: default; }
+.consent-hidden { display: none !important; }
+
+/* ── FIELDS ── */
+.field { margin-bottom: 18px; }
+.field-label { font-size: 12px; font-weight: 700; color: #7A746B; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.field-hint { font-size: 13px; color: #A09A92; margin-bottom: 8px; line-height: 1.4; }
+
+.field select, .field input, .field textarea {
+  width: 100%; padding: 10px 12px; border: 1px solid #E8E1D5;
+  border-radius: 6px; font-size: 16px; font-family: inherit;
+  background: #FEFDFB; color: #2C2C2C; outline: none; box-sizing: border-box;
+}
+.field select { appearance: auto; }
+.field textarea { resize: vertical; line-height: 1.6; }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: #B8622D; }
+
+.yn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.yn-btn {
+  flex: 1; min-width: 70px; padding: 10px 6px; border: 2px solid #E8E1D5;
+  border-radius: 6px; background: #FEFDFB; font-size: 13px; font-weight: 600;
+  font-family: inherit; cursor: pointer; text-align: center; color: #7A746B; line-height: 1.3;
+}
+.yn-btn.selected { border-color: #B8622D; background: #F0DCC8; color: #B8622D; }
+
+.divider { height: 1px; background: #E8E1D5; margin: 24px 0; }
+
+/* ── SECTION HEADERS ── */
+.section-head {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; padding: 8px 0; margin-bottom: 16px;
+  border-bottom: 2px solid #B8622D;
+}
+.section-head.green { border-bottom-color: #2D5A27; color: #2D5A27; }
+.section-head.ochre { color: #B8622D; }
+.section-head.alert { border-bottom-color: #C4652A; color: #C4652A; }
+
+
+/* ── CALC RESULTS ── */
+.calc-box {
+  background: #2C2C2C; color: #E8E3DB; padding: 16px;
+  border-radius: 8px; margin: 16px 0; font-size: 14px; line-height: 1.6;
+}
+.calc-box .calc-title {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.2px; color: #B8622D; margin-bottom: 10px;
+}
+.calc-row {
+  display: flex; justify-content: space-between; padding: 4px 0;
+  border-bottom: 1px solid #444;
+}
+.calc-row:last-child { border-bottom: none; }
+.calc-row .label { color: #A09A92; }
+.calc-row .val { font-weight: 700; }
+.calc-row .val.green { color: #7FBF7F; }
+.calc-row .val.alert { color: #E8A87C; }
+.calc-row.total { border-top: 2px solid #B8622D; padding-top: 8px; margin-top: 4px; }
+.calc-row.total .val { color: #B8622D; font-size: 16px; }
+
+.calc-toggle {
+  display: flex; gap: 0; margin-bottom: 12px; border-radius: 4px; overflow: hidden;
+}
+.calc-toggle button {
+  flex: 1; padding: 8px; border: none; font-size: 12px; font-weight: 700;
+  font-family: inherit; cursor: pointer; color: #A09A92; background: #444;
+}
+.calc-toggle button.active { background: #B8622D; color: white; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: block; width: 100%; padding: 14px; border: none; border-radius: 8px;
+  font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer;
+  margin-bottom: 10px; text-align: center; -webkit-appearance: none;
+}
+.btn-wa { background: #25D366; color: white; }
+.btn-copy { background: #B8622D; color: white; }
+.btn:active { opacity: 0.85; }
+.sent-msg { text-align: center; font-size: 15px; color: #2D5A27; font-weight: 600; display: none; margin-top: 12px; }
+
+.footer { padding: 12px 20px; background: #F5F0E8; font-size: 11px; color: #7A746B; text-align: center; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<!-- ═══ CONSENT ═══ -->
+<div class="consent-overlay" id="consentOverlay">
+  <div class="consent-box">
+    <h2>Before you start</h2>
+    <p>This form collects FFS observation data. The data is sent to the Grassroots Trust FFS programme coordinator and may be used to improve farming practices and inform agricultural research.</p>
+    <label>
+      <input type="checkbox" id="consentCheck" onchange="checkConsent()">
+      I have permission from the FFS host farmer and group to share this observation data with Grassroots Trust.
+    </label>
+    <button class="consent-btn" id="consentBtn" disabled onclick="acceptConsent()">Continue</button>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="wrap">
+
+<div class="header">
+  <div class="header-top">
+    <span class="brand">Munda</span>
+    <span class="tag">FFS OBSERVATION</span>
+  </div>
+  <h1>Post-meeting report</h1>
+  <p>Fill in after each FFS meeting. 3 minutes. Send to Seb.</p>
+</div>
+
+<div class="form">
+
+  <!-- ═══ MEETING TYPE — ALWAYS VISIBLE ═══ -->
+  <div class="field">
+    <div class="field-label">What type of meeting?</div>
+    <div class="yn-row">
+      <button class="yn-btn" data-field="meeting" data-val="Pre-season planning" onclick="ynSelect(this)">Pre-season</button>
+      <button class="yn-btn" data-field="meeting" data-val="Mid-season observation" onclick="ynSelect(this)">Mid-season</button>
+      <button class="yn-btn" data-field="meeting" data-val="Post-harvest review" onclick="ynSelect(this)">Post-harvest</button>
+    </div>
+  </div>
+
+  <!-- ═══ INTRO — VISIBLE UNTIL MEETING TYPE SELECTED ═══ -->
+  <div id="sec-intro" style="padding: 16px 0;">
+    <div style="background: #F5F0E8; border-radius: 8px; padding: 20px; line-height: 1.7; font-size: 15px; color: #5A5A5A;">
+      <div style="font-weight: 700; color: #2C2C2C; font-size: 16px; margin-bottom: 12px;">How this works</div>
+      <strong style="color: #B8622D;">1 farmer, 1 question, 2 plots.</strong> Same size, same seed, same everything — except the one thing being tested.<br><br>
+      You fill this in <strong>three times per season:</strong><br>
+      <strong style="color: #2C2C2C;">Pre-season</strong> — record the setup. What's being tested, varieties, rates, planting date.<br>
+      <strong style="color: #2C2C2C;">Mid-season</strong> — check the comparison is clean. Record what you observe.<br>
+      <strong style="color: #2C2C2C;">Post-harvest</strong> — weigh, calculate, compare.<br><br>
+      Select the meeting type above to start.
+    </div>
+  </div>
+
+  <!-- ═══ FORM FIELDS — HIDDEN UNTIL MEETING TYPE SELECTED ═══ -->
+  <div id="sec-basics" style="display: none;">
+
+  <div class="divider"></div>
+  <div class="section-head ochre">Meeting details</div>
+
+  <div class="field">
+    <div class="field-label">Date</div>
+    <input id="f-date" type="date">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Group</div>
+    <select id="f-group">
+      <option value="">Select group...</option>
+      <script>for(var i=1;i<=13;i++){document.write('<option value="Group '+i+'">Group '+i+'</option>')}</script>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Host farmer</div>
+    <input id="f-host" type="text" placeholder="Name">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Location</div>
+    <input id="f-location" type="text" placeholder="Village or area name">
+  </div>
+
+  <div class="field">
+    <div class="field-label">What is being tested?</div>
+    <div class="field-hint">The one question this FFS is answering.</div>
+    <input id="f-practice" type="text" placeholder='e.g. "With vs without covered manure"'>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Attendance</div>
+    <input id="f-attendance" type="number" placeholder="How many came">
+  </div>
+
+  <div id="sec-setup" style="display:none;">
+  <div class="field">
+    <div class="field-label">Variety (main crop)</div>
+    <input id="f-variety" type="text" placeholder="e.g. SC 513, Pool 16">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Legume (if intercropped)</div>
+    <input id="f-legume" type="text" placeholder="e.g. Velvet bean, cowpea, groundnut — or leave blank">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Planting date</div>
+    <input id="f-plantdate" type="date">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Plot A — control (describe)</div>
+    <div class="field-hint">Farmer's normal practice. Include rates.</div>
+    <input id="f-descA" type="text" placeholder='e.g. "1 bottle top/2 plants = 100kg fert/ha"'>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Plot B — treatment (describe)</div>
+    <div class="field-hint">What's different. Include rates.</div>
+    <input id="f-descB" type="text" placeholder='e.g. "1 bucket compost = 5t/ha + 100kg urea"'>
+  </div>
+
+  <!-- RATES REFERENCE -->
+  <details style="margin: 8px 0 8px; font-size: 13px; color: #7A746B; cursor: pointer;">
+    <summary style="font-weight: 700; color: #B8622D; padding: 8px 0;">Standard rates — quick reference</summary>
+    <div style="padding: 10px 0; line-height: 1.8;">
+      <strong>Fertiliser:</strong> 1 bottle top per plant = 200 kg/ha · 1 bottle top per 2 plants = 100 kg/ha<br>
+      <strong>Compost:</strong> 1 × 20L bucket per plot = 5 t/ha<br>
+      <strong>Green manure:</strong> 25 kg fresh weight per plot = 6,600 kg/ha<br>
+      <strong>Lime:</strong> 3.75 kg per plot = 1 t/ha<br>
+      <strong>Standard rate used:</strong> 100 kg/ha (closer to country average than recommended 200 kg)
+    </div>
+  </details>
+  </div>
+
+  <div id="sec-compare" style="display:none;">
+  <div class="divider"></div>
+
+  <!-- ═══ COMPARISON QUALITY ═══ -->
+  <div class="section-head alert">Comparison check</div>
+
+  <div class="field">
+    <div class="field-label">Are the two plots the same size?</div>
+    <div class="field-hint">Standard: 7.5m × 5m each</div>
+    <div class="yn-row">
+      <button class="yn-btn" data-field="samesize" data-val="Yes" onclick="ynSelect(this)">Yes</button>
+      <button class="yn-btn" data-field="samesize" data-val="No" onclick="ynSelect(this)">No</button>
+      <button class="yn-btn" data-field="samesize" data-val="Not sure" onclick="ynSelect(this)">Not sure</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Is only one thing different between the plots?</div>
+    <div class="field-hint">Same seed, spacing, planting date, weeding — except the one variable.</div>
+    <div class="yn-row">
+      <button class="yn-btn" data-field="onevariable" data-val="Yes, one difference" onclick="ynSelect(this)">Yes</button>
+      <button class="yn-btn" data-field="onevariable" data-val="No, multiple differences" onclick="ynSelect(this)">No</button>
+      <button class="yn-btn" data-field="onevariable" data-val="Not sure" onclick="ynSelect(this)">Not sure</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Can you see a difference between the plots?</div>
+    <div class="yn-row">
+      <button class="yn-btn" data-field="visible" data-val="Clear difference" onclick="ynSelect(this)">Clear</button>
+      <button class="yn-btn" data-field="visible" data-val="Some difference" onclick="ynSelect(this)">Some</button>
+      <button class="yn-btn" data-field="visible" data-val="No difference" onclick="ynSelect(this)">None</button>
+      <button class="yn-btn" data-field="visible" data-val="Too early" onclick="ynSelect(this)">Too early</button>
+    </div>
+  </div>
+  </div>
+
+  <div id="sec-fieldobs" style="display:none;">
+  <div class="divider"></div>
+
+  <!-- ═══ FIELD OBSERVATIONS ═══ -->
+  <div class="section-head green">Field observations</div>
+
+  <div class="field">
+    <div class="field-label">Field work done since last visit</div>
+    <div class="field-hint">Weeding, spraying, fertiliser application, thinning — on which plots, when.</div>
+    <textarea id="f-fieldwork" rows="2" placeholder="e.g. Both plots weeded 15 Jan. Plot B sprayed for FAW 20 Jan."></textarea>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Diseases or pests observed</div>
+    <div class="field-hint">What you see. Which plot. How bad.</div>
+    <textarea id="f-disease" rows="2" placeholder="e.g. Leaf blight on Plot A, moderate. None on Plot B."></textarea>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Crop condition</div>
+    <div class="field-hint">Height, colour, stand count, vigour — anything visible between the two plots.</div>
+    <textarea id="f-condition" rows="2" placeholder="e.g. Plot B taller, darker green, fewer gaps"></textarea>
+  </div>
+
+  <div class="field">
+    <div class="field-label">What did the group notice?</div>
+    <div class="field-hint">Their words, not yours.</div>
+    <textarea id="f-groupnoticed" rows="3" placeholder="What farmers said..."></textarea>
+  </div>
+
+  <div class="field">
+    <div class="field-label">What did you notice?</div>
+    <div class="field-hint">Anything the group missed. Anything surprising.</div>
+    <textarea id="f-younoticed" rows="3" placeholder="Your observation..."></textarea>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Any problems?</div>
+    <div class="field-hint">Livestock, drought, waterlogging, anything that affected plots.</div>
+    <textarea id="f-problems" rows="2" placeholder="Or leave blank"></textarea>
+  </div>
+  </div>
+
+  <div id="sec-harvest" style="display:none;">
+  <div class="divider"></div>
+
+  <!-- ═══ HARVEST DATA + CALCULATOR ═══ -->
+  <div class="section-head ochre">Harvest data</div>
+
+  <div class="field">
+    <div class="field-label">Plot A — grain yield, dried & shelled (kg)</div>
+    <div class="field-hint">Main crop from control plot</div>
+    <input id="f-yieldA" type="number" step="0.1" placeholder="kg from 7.5×5m plot" oninput="calculate()">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Plot B — grain yield, dried & shelled (kg)</div>
+    <div class="field-hint">Main crop from treatment plot</div>
+    <input id="f-yieldB" type="number" step="0.1" placeholder="kg from 7.5×5m plot" oninput="calculate()">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Plot A — legume yield (kg) · if intercropped</div>
+    <div class="field-hint">Leave blank if sole crop</div>
+    <input id="f-legYieldA" type="number" step="0.1" placeholder="kg from plot — optional" oninput="calculate()">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Plot B — legume yield (kg) · if intercropped</div>
+    <input id="f-legYieldB" type="number" step="0.1" placeholder="kg from plot — optional" oninput="calculate()">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Current grain price (K per kg)</div>
+    <input id="f-price" type="number" step="0.1" placeholder="e.g. 6.8" oninput="calculate()">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Legume price (K per kg) · if intercropped</div>
+    <input id="f-legPrice" type="number" step="0.1" placeholder="e.g. 12 — optional" oninput="calculate()">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Plot A total input cost (K per hectare)</div>
+    <div class="field-hint">Seed + fertiliser + any other costs, calculated at hectare scale.</div>
+    <input id="f-costA" type="number" step="1" placeholder="K per hectare" oninput="calculate()">
+  </div>
+
+  <div class="field">
+    <div class="field-label">Plot B total input cost (K per hectare)</div>
+    <input id="f-costB" type="number" step="1" placeholder="K per hectare" oninput="calculate()">
+  </div>
+
+  <!-- ═══ CALCULATOR OUTPUT ═══ -->
+  <div class="calc-box" id="calcBox" style="display:none;">
+    <div class="calc-title">Gross margins comparison</div>
+
+    <div class="calc-toggle">
+      <button id="togHa" class="active" onclick="setUnit('ha')">Per hectare (×267)</button>
+      <button id="togLima" onclick="setUnit('lima')">Per lima (×67)</button>
+    </div>
+
+    <div style="margin-bottom:12px; font-size:12px; color:#7A746B;">Plot size: 7.5m × 5m = 37.5 m²</div>
+
+    <!-- Plot A -->
+    <div style="font-size:12px; font-weight:700; color:#A09A92; margin-bottom:4px;">PLOT A — Control</div>
+    <div class="calc-row"><span class="label">Grain yield</span><span class="val" id="ca-yield">—</span></div>
+    <div class="calc-row"><span class="label">Grain income</span><span class="val" id="ca-income">—</span></div>
+    <div class="calc-row" id="ca-leg-row" style="display:none"><span class="label">Legume yield</span><span class="val" id="ca-legyield">—</span></div>
+    <div class="calc-row" id="ca-leginc-row" style="display:none"><span class="label">Legume income</span><span class="val" id="ca-legincome">—</span></div>
+    <div class="calc-row"><span class="label">Input cost</span><span class="val alert" id="ca-cost">—</span></div>
+    <div class="calc-row total"><span class="label">Total profit</span><span class="val" id="ca-profit">—</span></div>
+
+    <div style="height:12px;"></div>
+
+    <!-- Plot B -->
+    <div style="font-size:12px; font-weight:700; color:#A09A92; margin-bottom:4px;">PLOT B — Treatment</div>
+    <div class="calc-row"><span class="label">Grain yield</span><span class="val" id="cb-yield">—</span></div>
+    <div class="calc-row"><span class="label">Grain income</span><span class="val" id="cb-income">—</span></div>
+    <div class="calc-row" id="cb-leg-row" style="display:none"><span class="label">Legume yield</span><span class="val" id="cb-legyield">—</span></div>
+    <div class="calc-row" id="cb-leginc-row" style="display:none"><span class="label">Legume income</span><span class="val" id="cb-legincome">—</span></div>
+    <div class="calc-row"><span class="label">Input cost</span><span class="val alert" id="cb-cost">—</span></div>
+    <div class="calc-row total"><span class="label">Total profit</span><span class="val" id="cb-profit">—</span></div>
+
+    <div style="height:12px;"></div>
+
+    <div class="calc-row total">
+      <span class="label" style="font-weight:700; color:#B8622D;">Difference</span>
+      <span class="val green" id="c-diff">—</span>
+    </div>
+  </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══ SEND ═══ -->
+  <button class="btn btn-wa" onclick="sendWA()">Send to Seb via WhatsApp</button>
+  <button class="btn btn-copy" onclick="copyAll()">Copy report</button>
+  <div class="sent-msg" id="sentMsg">✓ Copied. Paste into WhatsApp.</div>
+
+  </div><!-- close sec-basics -->
+
+</div>
+
+<div class="footer">
+  Munda · Grassroots Trust · 2026
+</div>
+
+</div>
+
+<script>
+// ── STATE ──
+var ynValues = {};
+var currentUnit = 'ha';
+
+// ── CONSENT ──
+function checkConsent() {
+  var main = document.getElementById('consentCheck').checked;
+  document.getElementById('consentBtn').disabled = !main;
+}
+
+function acceptConsent() {
+  document.getElementById('consentOverlay').classList.add('consent-hidden');
+  try { localStorage.setItem('munda-consent', '1'); } catch(e) {}
+}
+
+// Check if already consented
+try {
+  if (localStorage.getItem('munda-consent') === '1') {
+    document.getElementById('consentOverlay').classList.add('consent-hidden');
+  }
+} catch(e) {}
+
+// Set today's date
+document.getElementById('f-date').value = new Date().toISOString().slice(0,10);
+
+
+// ── YN BUTTONS ──
+function ynSelect(btn) {
+  var field = btn.dataset.field;
+  ynValues[field] = btn.dataset.val;
+  var btns = btn.parentElement.querySelectorAll('.yn-btn');
+  btns.forEach(function(b) { b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  if (field === 'meeting') toggleSections();
+}
+
+function toggleSections() {
+  var m = ynValues.meeting || '';
+  var intro = document.getElementById('sec-intro');
+  var basics = document.getElementById('sec-basics');
+  var setup = document.getElementById('sec-setup');
+  var compare = document.getElementById('sec-compare');
+  var fieldobs = document.getElementById('sec-fieldobs');
+  var harvest = document.getElementById('sec-harvest');
+
+  intro.style.display = 'none';
+  basics.style.display = 'block';
+  setup.style.display = 'none';
+  compare.style.display = 'none';
+  fieldobs.style.display = 'none';
+  harvest.style.display = 'none';
+
+  if (m.indexOf('Pre') > -1) {
+    setup.style.display = 'block';
+  } else if (m.indexOf('Mid') > -1) {
+    compare.style.display = 'block';
+    fieldobs.style.display = 'block';
+  } else if (m.indexOf('Post') > -1) {
+    compare.style.display = 'block';
+    harvest.style.display = 'block';
+  }
+}
+
+// ── CALCULATOR ──
+function setUnit(u) {
+  currentUnit = u;
+  document.getElementById('togHa').classList.toggle('active', u === 'ha');
+  document.getElementById('togLima').classList.toggle('active', u === 'lima');
+  calculate();
+}
+
+function calculate() {
+  var yA = parseFloat(document.getElementById('f-yieldA').value);
+  var yB = parseFloat(document.getElementById('f-yieldB').value);
+  var price = parseFloat(document.getElementById('f-price').value);
+  var cA = parseFloat(document.getElementById('f-costA').value) || 0;
+  var cB = parseFloat(document.getElementById('f-costB').value) || 0;
+  var lA = parseFloat(document.getElementById('f-legYieldA').value);
+  var lB = parseFloat(document.getElementById('f-legYieldB').value);
+  var lPrice = parseFloat(document.getElementById('f-legPrice').value);
+
+  var box = document.getElementById('calcBox');
+  if (isNaN(yA) && isNaN(yB)) { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+
+  var mult = currentUnit === 'ha' ? 267 : 67;
+  var label = currentUnit === 'ha' ? '/ha' : '/lima';
+  var hasLeg = !isNaN(lA) || !isNaN(lB);
+
+  var yAha = isNaN(yA) ? null : yA * mult;
+  var yBha = isNaN(yB) ? null : yB * mult;
+  var lAha = isNaN(lA) ? null : lA * mult;
+  var lBha = isNaN(lB) ? null : lB * mult;
+
+  function fmt(n) { return n === null ? '—' : 'K ' + Math.round(n).toLocaleString(); }
+  function fmtKg(n) { return n === null ? '—' : Math.round(n).toLocaleString() + ' kg' + label; }
+
+  document.getElementById('ca-yield').textContent = fmtKg(yAha);
+  document.getElementById('cb-yield').textContent = fmtKg(yBha);
+
+  document.getElementById('ca-leg-row').style.display = hasLeg ? 'flex' : 'none';
+  document.getElementById('ca-leginc-row').style.display = hasLeg ? 'flex' : 'none';
+  document.getElementById('cb-leg-row').style.display = hasLeg ? 'flex' : 'none';
+  document.getElementById('cb-leginc-row').style.display = hasLeg ? 'flex' : 'none';
+  document.getElementById('ca-legyield').textContent = fmtKg(lAha);
+  document.getElementById('cb-legyield').textContent = fmtKg(lBha);
+
+  if (!isNaN(price) && price > 0) {
+    var grainIncA = yAha !== null ? yAha * price : null;
+    var grainIncB = yBha !== null ? yBha * price : null;
+    document.getElementById('ca-income').textContent = fmt(grainIncA);
+    document.getElementById('cb-income').textContent = fmt(grainIncB);
+
+    var legIncA = (lAha !== null && !isNaN(lPrice) && lPrice > 0) ? lAha * lPrice : 0;
+    var legIncB = (lBha !== null && !isNaN(lPrice) && lPrice > 0) ? lBha * lPrice : 0;
+    document.getElementById('ca-legincome').textContent = legIncA > 0 ? fmt(legIncA) : '—';
+    document.getElementById('cb-legincome').textContent = legIncB > 0 ? fmt(legIncB) : '—';
+
+    document.getElementById('ca-cost').textContent = fmt(cA);
+    document.getElementById('cb-cost').textContent = fmt(cB);
+
+    var totalIncA = (grainIncA || 0) + legIncA;
+    var totalIncB = (grainIncB || 0) + legIncB;
+    var profA = grainIncA !== null ? totalIncA - cA : null;
+    var profB = grainIncB !== null ? totalIncB - cB : null;
+    document.getElementById('ca-profit').textContent = fmt(profA);
+    document.getElementById('cb-profit').textContent = fmt(profB);
+
+    if (profA !== null && profB !== null) {
+      var diff = profB - profA;
+      var el = document.getElementById('c-diff');
+      el.textContent = (diff >= 0 ? '+ ' : '- ') + 'K ' + Math.abs(Math.round(diff)).toLocaleString() + label;
+      el.className = 'val ' + (diff >= 0 ? 'green' : 'alert');
+    } else {
+      document.getElementById('c-diff').textContent = '—';
+    }
+  } else {
+    ['ca-income','cb-income','ca-legincome','cb-legincome','ca-cost','cb-cost','ca-profit','cb-profit','c-diff'].forEach(function(id) {
+      document.getElementById(id).textContent = '—';
+    });
+  }
+}
+
+// ── COMPILE ──
+function val(id) { return document.getElementById(id).value.trim(); }
+
+function compile() {
+  var t = '🌱 MUNDA FFS OBSERVATION\n';
+  t += '━━━━━━━━━━━━━━━━━━━━\n\n';
+
+  if (val('f-date')) t += '📅 ' + val('f-date') + '\n';
+  if (ynValues.meeting) t += '📋 ' + ynValues.meeting + '\n';
+  if (val('f-group')) t += '👥 ' + val('f-group') + '\n';
+  if (val('f-host')) t += '🏠 Host: ' + val('f-host') + '\n';
+  if (val('f-location')) t += '📍 Location: ' + val('f-location') + '\n';
+  if (val('f-practice')) t += '🔬 Testing: ' + val('f-practice') + '\n';
+  if (val('f-attendance')) t += '👤 Attendance: ' + val('f-attendance') + '\n';
+  if (val('f-variety')) t += '🌾 Variety: ' + val('f-variety') + '\n';
+  if (val('f-legume')) t += '🫘 Legume: ' + val('f-legume') + '\n';
+  if (val('f-plantdate')) t += '🌱 Planting date: ' + val('f-plantdate') + '\n';
+
+  if (val('f-descA') || val('f-descB')) {
+    t += '\n── Plot setup ──\n';
+    if (val('f-descA')) t += 'Plot A (control): ' + val('f-descA') + '\n';
+    if (val('f-descB')) t += 'Plot B (treatment): ' + val('f-descB') + '\n';
+  }
+
+  t += '\n── Comparison check ──\n';
+  if (ynValues.samesize) t += 'Same size plots: ' + ynValues.samesize + '\n';
+  if (ynValues.onevariable) t += 'One variable only: ' + ynValues.onevariable + '\n';
+  if (ynValues.visible) t += 'Visible difference: ' + ynValues.visible + '\n';
+
+  if (val('f-fieldwork') || val('f-disease') || val('f-condition') || val('f-groupnoticed') || val('f-younoticed') || val('f-problems')) {
+    t += '\n── Observations ──\n';
+    if (val('f-fieldwork')) t += 'Field work done: ' + val('f-fieldwork') + '\n';
+    if (val('f-disease')) t += 'Disease/pests: ' + val('f-disease') + '\n';
+    if (val('f-condition')) t += 'Crop condition: ' + val('f-condition') + '\n';
+    if (val('f-groupnoticed')) t += 'Group noticed: ' + val('f-groupnoticed') + '\n';
+    if (val('f-younoticed')) t += 'Facilitator noticed: ' + val('f-younoticed') + '\n';
+    if (val('f-problems')) t += 'Problems: ' + val('f-problems') + '\n';
+  }
+
+  var yA = val('f-yieldA');
+  var yB = val('f-yieldB');
+  var legA = val('f-legYieldA');
+  var legB = val('f-legYieldB');
+  if (yA || yB) {
+    t += '\n── Harvest data ──\n';
+    t += 'Plot size: 7.5m × 5m (37.5 m²)\n';
+    if (yA) t += 'Plot A grain: ' + yA + ' kg\n';
+    if (legA) t += 'Plot A legume: ' + legA + ' kg\n';
+    if (yB) t += 'Plot B grain: ' + yB + ' kg\n';
+    if (legB) t += 'Plot B legume: ' + legB + ' kg\n';
+
+    var price = parseFloat(val('f-price'));
+    var lPrice = parseFloat(val('f-legPrice'));
+    var cA = parseFloat(val('f-costA')) || 0;
+    var cB = parseFloat(val('f-costB')) || 0;
+
+    if (!isNaN(price) && price > 0) {
+      var mult = 267;
+      var yAn = parseFloat(yA) * mult;
+      var yBn = parseFloat(yB) * mult;
+      var lAn = legA ? parseFloat(legA) * mult : 0;
+      var lBn = legB ? parseFloat(legB) * mult : 0;
+      var legPr = (!isNaN(lPrice) && lPrice > 0) ? lPrice : 0;
+
+      t += '\n── Per hectare (×267) ──\n';
+      t += 'Grain price: K' + price + '/kg\n';
+      if (legPr > 0) t += 'Legume price: K' + legPr + '/kg\n';
+
+      if (yA) {
+        var grainIncA = yAn * price;
+        var legIncA = lAn * legPr;
+        var totalIncA = grainIncA + legIncA;
+        t += 'Plot A: ' + Math.round(yAn) + ' kg grain/ha';
+        if (lAn > 0) t += ' + ' + Math.round(lAn) + ' kg legume/ha';
+        t += '\n  Income: K' + Math.round(totalIncA).toLocaleString();
+        t += ' − Cost: K' + Math.round(cA).toLocaleString();
+        t += ' = Profit: K' + Math.round(totalIncA - cA).toLocaleString() + '\n';
+      }
+      if (yB) {
+        var grainIncB = yBn * price;
+        var legIncB = lBn * legPr;
+        var totalIncB = grainIncB + legIncB;
+        t += 'Plot B: ' + Math.round(yBn) + ' kg grain/ha';
+        if (lBn > 0) t += ' + ' + Math.round(lBn) + ' kg legume/ha';
+        t += '\n  Income: K' + Math.round(totalIncB).toLocaleString();
+        t += ' − Cost: K' + Math.round(cB).toLocaleString();
+        t += ' = Profit: K' + Math.round(totalIncB - cB).toLocaleString() + '\n';
+      }
+      if (yA && yB) {
+        var profitA = (yAn * price + lAn * legPr) - cA;
+        var profitB = (yBn * price + lBn * legPr) - cB;
+        var diff = profitB - profitA;
+        t += 'DIFFERENCE: ' + (diff >= 0 ? '+' : '') + 'K' + Math.round(diff).toLocaleString() + '/ha\n';
+      }
+    }
+  }
+
+  t += '\n━━━━━━━━━━━━━━━━━━━━';
+  t += '\nSent ' + new Date().toLocaleDateString();
+  t += '\nMunda · Grassroots Trust';
+  return t;
+}
+
+function sendWA() {
+  window.open('https://wa.me/260977313318?text=' + encodeURIComponent(compile()), '_blank');
+  showSent();
+}
+
+function copyAll() {
+  var text = compile();
+  if (navigator.clipboard) { navigator.clipboard.writeText(text).then(showSent); }
+  else {
+    var ta = document.createElement('textarea'); ta.value = text;
+    ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta); showSent();
+  }
+}
+
+function showSent() {
+  var el = document.getElementById('sentMsg');
+  el.style.display = 'block';
+  setTimeout(function() { el.style.display = 'none'; }, 4000);
+}
+</script>
+
+</body>
+</html>

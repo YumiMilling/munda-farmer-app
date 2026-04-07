@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Munda — Where We Are</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Source Sans 3', -apple-system, system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  color: #2C2C2C;
+  background: #F5F0E8;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 480px; margin: 0 auto; background: #F5F0E8; min-height: 100vh; }
+.opening { padding: 48px 24px 32px; }
+.brand { font-size: 13px; color: #B8622D; font-weight: 700; letter-spacing: 1px; margin-bottom: 20px; }
+h1 { font-size: 26px; font-weight: 700; line-height: 1.15; color: #2C2C2C; margin-bottom: 16px; }
+.intro-note { font-size: 15px; color: #7A746B; line-height: 1.6; }
+.body { padding: 0 24px; }
+p { font-size: 16px; line-height: 1.7; margin-bottom: 20px; }
+p strong { color: #2C2C2C; }
+.ochre { color: #B8622D; }
+.divider { height: 1px; background: #E8E1D5; margin: 8px 0 40px; }
+em { font-style: italic; color: #7A746B; }
+.quiet { color: #7A746B; font-style: italic; }
+
+/* ── SEB'S WORDS ── */
+.seb {
+  border-left: 3px solid #2D5A27;
+  padding: 14px 18px;
+  margin: 20px 0;
+  background: #D5E8D0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.seb-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #2D5A27;
+  margin-bottom: 6px;
+}
+
+/* ── CHALLENGE BOXES ── */
+.challenge {
+  border-left: 3px solid #C4652A;
+  padding: 14px 18px;
+  margin: 20px 0;
+  background: #FDF0E6;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.challenge-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #C4652A;
+  margin-bottom: 6px;
+}
+
+/* ── NEXT STEP BOXES ── */
+.step {
+  border-left: 3px solid #B8622D;
+  padding: 14px 18px;
+  margin: 20px 0;
+  background: #F0DCC8;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.step-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #B8622D;
+  margin-bottom: 6px;
+}
+.step-who {
+  font-size: 13px;
+  color: #7A746B;
+  margin-top: 8px;
+}
+
+/* ── DARK BOX ── */
+.dark {
+  background: #2C2C2C;
+  color: #E8E3DB;
+  padding: 18px;
+  margin: 20px 0;
+  border-radius: 3px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.dark strong { color: #B8622D; }
+
+/* ── RESPONSE FIELDS ── */
+.respond {
+  margin: 24px 0;
+  border-left: 3px solid #B8622D;
+  padding-left: 18px;
+}
+.respond.answered { border-left-color: #2D5A27; }
+.respond-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin-bottom: 8px;
+}
+.respond-input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #E8E1D5;
+  background: transparent;
+  padding: 8px 0;
+  font-size: 16px;
+  font-family: inherit;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  color: #2C2C2C;
+  transition: border-color 0.2s;
+}
+.respond-input:focus { border-bottom-color: #B8622D; }
+.respond-check {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #2D5A27;
+  font-weight: 600;
+  display: none;
+}
+.respond.answered .respond-check { display: block; }
+
+/* ── BUTTONS ── */
+.send-section { padding: 16px 0 48px; }
+.send-count { font-size: 14px; color: #7A746B; text-align: center; margin-bottom: 20px; }
+.btn {
+  display: block; width: 100%; padding: 16px; border: none; border-radius: 10px;
+  font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer;
+  margin-bottom: 10px; text-align: center; -webkit-appearance: none;
+}
+.btn-wa { background: #25D366; color: white; }
+.btn-copy { background: #B8622D; color: white; }
+.btn:active { opacity: 0.85; }
+.sent-msg { margin-top: 16px; text-align: center; font-size: 15px; color: #2D5A27; font-weight: 600; display: none; }
+.footer { padding: 16px 24px; text-align: center; font-size: 12px; color: #7A746B; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<div class="opening">
+  <div class="brand">MUNDA</div>
+  <h1>Where we are.<br>What's next.</h1>
+  <p class="intro-note">This integrates your answers from our last conversation. Read through. React where something's off. Send back your thoughts.</p>
+</div>
+
+<div class="body">
+
+<!-- ═══════════════════════════════════════ -->
+<!-- THE MODEL — IN SEB'S WORDS            -->
+<!-- ═══════════════════════════════════════ -->
+
+<p><strong>The model, in your words.</strong></p>
+
+<div class="seb">
+  <div class="seb-label">Seb's field school</div>
+  One farmer hosts. Two plots on their land — same size, same seed, same spacing, same everything except one variable. The host farmer does all the work, not the group. The group observes.
+  <br><br>
+  Three meetings a year. Pre-season to plan what to test. Mid-season to observe when work pressure drops. Post-season to weigh, compare, and digest.
+  <br><br>
+  25 groups running already — testing manure, fertiliser, varieties, intercropping, conservation agriculture, rotations. Each one chosen by the farmer group based on their own priorities.
+</div>
+
+<p>This is radically simpler than the FAO model. No group plot. No weekly sessions. No facilitator training that takes a season. One farmer, their own field, three days of everyone's time. The cost is essentially zero.</p>
+
+<p>The comparison plot does the teaching. If the facilitator gets something slightly wrong, the side-by-side result corrects it. The method is self-correcting — that's what makes it replicable by anyone.</p>
+
+<div class="seb">
+  <div class="seb-label">On facilitators</div>
+  Need to get the basics right to avoid error. All things the same, apart from one difference, makes the lesson. Same size plots, spacing, variety. Then change one variable — e.g. with and without manure.
+  <br><br>
+  Facilitator needs to understand the logic. Always best to see it working to grasp the process. But really, that's the trick we're still working on — where to place emphasis and how. In theory, anyone can be a facilitator.
+</div>
+
+<p>The core facilitator skill is one thing: <strong>keep the comparison clean.</strong> Same everything except one variable. If they hold that discipline, the field does the rest.</p>
+
+<div class="seb">
+  <div class="seb-label">On what's evolving</div>
+  Many things. Mainly crop green manure production using velvet bean and sun hemp. Also strip intercropping and mixed intercropping options for maize and legumes — maximising synergy, LER and productivity. Still a work in progress, but very promising.
+</div>
+
+<p>This confirms the knowledge base can't be static. What Sebastian recommends today may change next season. A printed manual is dead on arrival. The digital tool evolves with him.</p>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- THE CASCADE                            -->
+<!-- ═══════════════════════════════════════ -->
+
+<p><strong>The multiplication model.</strong></p>
+
+<p>You train trainers. They train facilitators. Facilitators host field schools. Best farmers from each season become next season's facilitators.</p>
+
+<p>One workshop from you → 25 trainers → 750 facilitators → 18,750 farmers. Run several workshops a year — as many as demand and energy allow. You're the one in the room. You're the one walking the plots. You're the quality eye that keeps the methodology clean as it cascades.</p>
+
+<p>Your role isn't minimised. It's redirected — from working with 25 farmers to shaping how thousands learn.</p>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- THE DATA ANGLE                         -->
+<!-- ═══════════════════════════════════════ -->
+
+<p><strong>The data nobody is collecting.</strong></p>
+
+<div class="seb">
+  <div class="seb-label">The question we didn't ask</div>
+  How the information these groups produce can be shared with the wider community and at a national level. Using these farmer-led experimental plots as data for informing research, education and policy. Tens of thousands of data points created every year — how do we use that to the advantage of our rural and national development?
+</div>
+
+<p>This is bigger than extension. If 750 facilitators each run one FFS per season, that's 750 controlled comparisons — real yield data, from real fields, under real conditions, across multiple districts and soil types. Structured and aggregated, that's an agricultural research dataset built from the bottom up. No research station. No million-dollar project. Farmers producing the evidence that informs national policy.</p>
+
+<p>The app makes this possible. Not as an advice tool — as a data capture tool. The facilitator enters: practice tested, plot sizes, yields, soil type, zone, rainfall estimate, conclusion. Structured, tagged, comparable across thousands of sites.</p>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- FIVE-YEAR VISION                       -->
+<!-- ═══════════════════════════════════════ -->
+
+<p><strong>Where this goes.</strong></p>
+
+<div class="seb">
+  <div class="seb-label">Seb's five-year picture</div>
+  Public and NGO staff employing the process as part of their core extension system and programming. Each cooperative running at least one FFS group to answer pressing issues surrounding agricultural systems. Inclusion of this process in curriculum for colleges and higher education.
+</div>
+
+<p>That's institutional adoption. Extension services, cooperatives, and agricultural colleges all using the same lightweight methodology. With structured data flowing from every group into a national evidence base. That's the vision we're building toward.</p>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- CHALLENGES                             -->
+<!-- ═══════════════════════════════════════ -->
+
+<p><strong>Challenges. Honest ones.</strong></p>
+
+<div class="challenge">
+  <div class="challenge-label">1 · AIZ Regulation</div>
+  Only trained and certified staff can advise farmers — including through videos, social media, and digital tools. The Munda app, the videos, the entire cascade has a legal dimension. If a non-certified facilitator uses the tool to guide a farmer, that may be non-compliant. This is the gate. Everything else depends on resolving this.
+  <br><br>
+  Two possible paths: position Munda as a <em>facilitation support tool</em> (not advisory), which may fall outside AIZ scope. Or get the FFS approach itself submitted as a "released technology" through the extension committee. Both need investigation.
+</div>
+
+<div class="respond" id="r-aiz">
+  <div class="respond-label">Your reaction — is this the right read on the AIZ constraint?</div>
+  <textarea class="respond-input" data-id="aiz" rows="2" placeholder="Type or voice-to-text..." oninput="checkR(this)"></textarea>
+  <div class="respond-check">✓ Noted</div>
+</div>
+
+<div class="challenge">
+  <div class="challenge-label">2 · Methodology degradation</div>
+  The FFS model is simple. But "simple" degrades across levels of multiplication. By the time a facilitator three steps removed from you sets up a comparison, they might allow two variables to change, skip the weighing, or turn the observation into a lecture. You named this yourself — existing field schools are "top-down demonstrations in essence." The risk is that scaling turns your approach back into the thing it was designed to replace.
+  <br><br>
+  Mitigation: the app enforces methodology at the point of capture. The data form only accepts one variable per comparison. It requires yield entries for both plots. It won't let a facilitator skip the post-harvest review. The tool becomes the guardrail.
+</div>
+
+<div class="challenge">
+  <div class="challenge-label">3 · Existing FFS reputation</div>
+  Field schools already exist in Zambia. Many are heavy, group-run, top-down, and don't work well. Your model is fundamentally different — but anyone hearing "Farmer Field School" may think of the old version. The naming and positioning has to make the distinction clear. This is not what they've seen before.
+</div>
+
+<div class="respond" id="r-name">
+  <div class="respond-label">Is the name "Farmer Field School" a problem? Should we call it something else?</div>
+  <textarea class="respond-input" data-id="naming" rows="2" placeholder="Type or voice-to-text..." oninput="checkR(this)"></textarea>
+  <div class="respond-check">✓ Noted</div>
+</div>
+
+<div class="challenge">
+  <div class="challenge-label">4 · Data quality</div>
+  Farmer-led experiments are only useful as data if the collection is consistent. A farmer writing "the manure plot did better" is an anecdote. A structured entry with yields, soil type, zone, and single variable tagged is data. The app needs to make structured capture easy enough that facilitators actually do it — on a phone, in the field, in under five minutes.
+</div>
+
+<div class="challenge">
+  <div class="challenge-label">5 · Sebastian as single point of knowledge</div>
+  The practices keep evolving. The knowledge base needs updating. The quality of the cascade depends on the quality of the source. If something happens to you, or if you simply can't keep up with the demand, the system stalls. The AI tool partially solves this — your thinking is captured and accessible. But the evolving edge of the knowledge still lives in your head.
+</div>
+
+<div class="respond" id="r-risk">
+  <div class="respond-label">Who else has deep enough knowledge to contribute? Is there anyone?</div>
+  <textarea class="respond-input" data-id="others" rows="2" placeholder="Type or voice-to-text..." oninput="checkR(this)"></textarea>
+  <div class="respond-check">✓ Noted</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- NEXT STEPS                             -->
+<!-- ═══════════════════════════════════════ -->
+
+<p><strong>Proposed next steps. In order.</strong></p>
+
+<div class="step">
+  <div class="step-label">Step 1 · Resolve the AIZ question</div>
+  Before anything goes public. Investigate whether the FFS approach can be submitted as a "released technology." Clarify whether Munda as a facilitation support tool falls inside or outside AIZ certification requirements. This determines the entire deployment pathway.
+  <div class="step-who"><strong class="ochre">Who:</strong> Jephthah / EcoAfri — through the CATSP familiarisation exercise already planned. <strong class="ochre">When:</strong> Immediate.</div>
+</div>
+
+<div class="step">
+  <div class="step-label">Step 2 · Capture data from existing 25 groups</div>
+  Your current groups are finishing the season or about to. Build a simple structured capture form — practice tested, plot sizes, yields on both, soil type, zone, one-line conclusion. Even 15–20 clean results gives you the evidence base to open every conversation that follows.
+  <div class="step-who"><strong class="ochre">Who:</strong> ZamAi builds the form. Seb captures from his current groups. <strong class="ochre">When:</strong> This harvest season.</div>
+</div>
+
+<div class="step">
+  <div class="step-label">Step 3 · Record the video</div>
+  One take. Your farm. An actual FFS group doing a post-harvest review. Real, not scripted. Show the two plots, the weighing, the conversation, the conclusion. 3–5 minutes. This is the recruitment tool for the first Train-the-Trainer workshop.
+  <div class="step-who"><strong class="ochre">Who:</strong> Seb records. ZamAi can help edit if needed but raw is fine. <strong class="ochre">When:</strong> At the next post-harvest review — align with Step 2.</div>
+</div>
+
+<div class="step">
+  <div class="step-label">Step 4 · First Train-the-Trainer workshop</div>
+  Not at scale. 10–15 people. Extension officers and lead farmers from districts where you already have relationships. They learn the methodology, use the data capture tool, each commit to hosting one FFS next season. This is the proof-of-cascade test.
+  <div class="step-who"><strong class="ochre">Who:</strong> Seb leads. ZamAi supports with tool and logistics. <strong class="ochre">When:</strong> Pre-season, before the next planting window.</div>
+</div>
+
+<div class="step">
+  <div class="step-label">Step 5 · One season of cascade results</div>
+  The 10–15 facilitators each run one FFS. Structured data captured through the app. Seb visits a sample to quality-check methodology. At the end of the season you have: the video, results from 25 existing groups, results from 10–15 cascade groups, and a working digital tool. That's the evidence package.
+  <div class="step-who"><strong class="ochre">Who:</strong> Facilitators run groups. Seb visits. ZamAi aggregates data. <strong class="ochre">When:</strong> One full growing season.</div>
+</div>
+
+<div class="step">
+  <div class="step-label">Step 6 · CATSP positioning</div>
+  Real yield comparisons from farmer-led trials. Collected through a digital system. Demonstrating a scalable extension methodology that doesn't depend on subsidised inputs. That's the brief for the MoA familiarisation exercise and CATSP engagement.
+  <div class="step-who"><strong class="ochre">Who:</strong> ZamAi + Jephthah / EcoAfri handle policy positioning. Seb doesn't need to be in those rooms — results speak. <strong class="ochre">When:</strong> After one cascade season. Roughly 12–18 months from now.</div>
+</div>
+
+<div class="respond" id="r-steps">
+  <div class="respond-label">Does this sequence make sense? What would you change?</div>
+  <textarea class="respond-input" data-id="sequence" rows="2" placeholder="Type or voice-to-text..." oninput="checkR(this)"></textarea>
+  <div class="respond-check">✓ Noted</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- WHO DOES WHAT                          -->
+<!-- ═══════════════════════════════════════ -->
+
+<p><strong>Who does what.</strong></p>
+
+<div class="dark">
+  <strong>Sebastian / Grassroots Trust</strong><br>
+  The knowledge. The method. The credibility. The workshops — as many as demand requires. Field visits to check quality. The video. Ongoing evolution of the practices. The living centre of the programme.
+  <br><br>
+  <strong>ZamAi Solutions</strong><br>
+  The digital tool — data capture, methodology guardrail, AI knowledge base. Programme design and cascade structure. Policy positioning with CATSP. Data aggregation and evidence packaging. Everything that makes the knowledge travel at scale without degrading.
+  <br><br>
+  <strong>Jephthah / EcoAfri</strong><br>
+  AIZ and extension committee navigation. CATSP familiarisation exercise. Policy pathway. The institutional door-opener.
+</div>
+
+<div class="divider"></div>
+
+<p><strong>One more thing.</strong></p>
+
+<p>Your 25 groups are already producing the kind of evidence that CATSP will need and that no one else in Zambia is collecting in a structured way. That's not a side benefit. That's the strategic value of the whole thing. Farmer-led trials generating policy-grade data at national scale — that's what connects your field school to institutional adoption.</p>
+
+<p>Twenty years proving it works. Now let's build the system that makes it travel.</p>
+
+<div class="respond" id="r-final">
+  <div class="respond-label">Final thoughts — anything we've missed, got wrong, or that you want to push back on?</div>
+  <textarea class="respond-input" data-id="final" rows="2" placeholder="Type or voice-to-text..." oninput="checkR(this)"></textarea>
+  <div class="respond-check">✓ Noted</div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SEND                                   -->
+<!-- ═══════════════════════════════════════ -->
+
+<div class="send-section">
+  <div class="send-count" id="sendCount">React to what you want. Send when ready.</div>
+
+  <button class="btn btn-wa" onclick="sendWA()">Send via WhatsApp</button>
+  <button class="btn btn-copy" onclick="copyAll()">Copy all responses</button>
+
+  <div class="sent-msg" id="sentMsg">✓ Copied. Paste wherever works.</div>
+</div>
+
+</div>
+
+<div class="footer">
+  Munda · Grassroots Trust + ZamAi Solutions · April 2026<br>
+  Working document — v2
+</div>
+
+</div>
+
+<script>
+function checkR(el) {
+  var r = el.closest('.respond');
+  if (el.value.trim()) {
+    r.classList.add('answered');
+    el.rows = 5;
+  } else {
+    r.classList.remove('answered');
+    el.rows = 2;
+  }
+  updateCount();
+}
+
+function updateCount() {
+  var fields = document.querySelectorAll('.respond-input');
+  var count = 0;
+  fields.forEach(function(f) { if (f.value.trim()) count++; });
+  var el = document.getElementById('sendCount');
+  el.textContent = count > 0 ? count + ' response' + (count > 1 ? 's' : '') + ' ready to send' : 'React to what you want. Send when ready.';
+}
+
+function compile() {
+  var fields = document.querySelectorAll('.respond-input');
+  var text = '🌱 Munda v2 — Seb\'s responses\n\n';
+  fields.forEach(function(f) {
+    var val = f.value.trim();
+    if (val) {
+      var label = f.closest('.respond').querySelector('.respond-label').textContent;
+      text += '▸ ' + label + '\n' + val + '\n\n';
+    }
+  });
+  if (text.indexOf('▸') === -1) text += '(no responses yet)\n\n';
+  text += '— sent ' + new Date().toLocaleDateString();
+  return text;
+}
+
+function sendWA() {
+  window.open('https://wa.me/?text=' + encodeURIComponent(compile()), '_blank');
+  showSent();
+}
+
+function copyAll() {
+  var text = compile();
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(showSent);
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showSent();
+  }
+}
+
+function showSent() {
+  var el = document.getElementById('sentMsg');
+  el.style.display = 'block';
+  setTimeout(function() { el.style.display = 'none'; }, 4000);
+}
+
+document.querySelectorAll('.respond-input').forEach(function(el) {
+  el.addEventListener('focus', function() { if (!this.value.trim()) this.rows = 5; });
+  el.addEventListener('blur', function() { if (!this.value.trim()) this.rows = 2; });
+});
+</script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { getSession, getProfile, onAuthChange } from './lib/auth'
 import Login from './pages/Login'
 import MundaTracker from './MundaTracker'
@@ -39,7 +39,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {isAdmin && <Route path="/admin" element={<Admin />} />}
+        <Route path="/admin" element={<Admin />} />
         <Route path="/*" element={<MundaTracker userProfile={profile} />} />
       </Routes>
     </BrowserRouter>
