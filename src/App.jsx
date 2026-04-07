@@ -29,10 +29,10 @@ export default function App() {
     return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Source Sans 3', system-ui, sans-serif", color: "#7A746B" }}>Loading...</div>
   }
 
-  // Not logged in
-  if (!session) {
-    return <Login />
-  }
+  // DEV BYPASS: skip login during development
+  // if (!session) {
+  //   return <Login />
+  // }
 
   const isAdmin = profile?.role === 'admin'
 
